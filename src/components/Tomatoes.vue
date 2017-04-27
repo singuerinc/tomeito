@@ -23,6 +23,7 @@
     },
     methods: {
       onTimerComplete () {
+        // UI: https://dribbble.com/shots/2927583-Pomodoro-timer
         const timer = new Timer({bus: this.$store.state.bus})
         this.$store.state.tomato = timer
         this.$store.state.tomatoes.push(timer)
