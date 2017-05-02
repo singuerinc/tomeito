@@ -9,7 +9,8 @@ const store = new Vuex.Store({
   state: {
     bus,
     tomatoes: [],
-    tomato: null
+    timer: null,
+    auto: false
   },
   mutations: {}
 })
