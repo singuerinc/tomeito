@@ -1,11 +1,14 @@
 const INTERVAL = 1000
+// const TYPE_TOMATO = 1000 * 10
+// const TYPE_BREAK = 1000 * 5
 const TYPE_TOMATO = 1000 * 60 * 25
 const TYPE_BREAK = 1000 * 60 * 5
+let _bus
 
 export default class Timer {
   constructor ({bus, type}) {
+    _bus = bus
     this.type = type
-    this.bus = bus
     this.completed = false
     this.time = this.type
     this.progress = 0
@@ -25,7 +28,7 @@ export default class Timer {
     if (!this._isRunning) {
       this._isRunning = true
       this._interval = setInterval(this.tick.bind(this), INTERVAL)
-      this.bus.$emit('started', this)
+      _bus.$emit('started', this)
     }
 
     if (!this.initTime) {
@@ -37,7 +40,7 @@ export default class Timer {
     if (this._isRunning) {
       this._isRunning = false
       this._interval = clearInterval(this._interval)
-      this.bus.$emit('paused', this)
+      _bus.$emit('paused', this)
     }
   }
 
@@ -53,23 +56,23 @@ export default class Timer {
   complete () {
     this.pause()
     this.completed = true
-    this.bus.$emit('completed', this)
+    _bus.$emit('completed', this)
   }
 
   skip () {
     this.pause()
     this.completed = false
-    this.bus.$emit('skipped', this)
+    _bus.$emit('skipped', this)
   }
 
   tick () {
     this.time -= INTERVAL
     this.currentTime = this.initTime + this.time
     this.progress = (this._getTotal() - this.time) / this._getTotal()
-    this.bus.$emit('tick', this)
     if (this.time <= 0) {
       this.complete()
     }
+    _bus.$emit('tick', this)
   }
 
   _getTotal () {

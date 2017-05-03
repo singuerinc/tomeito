@@ -19,6 +19,9 @@
         tick: null
       }
     },
+    beforeCreate () {
+      this.$store.dispatch('loadPreferences')
+    },
     created () {
       this.tick = new Audio()
       this.tick.src = 'static/tick.mp3'
@@ -41,21 +44,19 @@
         this.tick.pause()
         this.onTimerComplete(timer, true)
       })
+    },
+    beforeDestroy () {
 
-      this.$store.state.bus.$on('tick', (timer) => {
-      })
-
-      this.onTimerComplete(null, false)
     },
     watch: {
       '$store.state.volume': function (value) {
-        this.tick.volume = value ? 1 : 0
+        this.tick.volume = value ? 0.5 : 0
       }
     },
     methods: {
       onTimerComplete (prevTimer, skip) {
         if (!skip && (prevTimer && prevTimer.type === Timer.TYPE_TOMATO)) {
-          this.$store.state.tomatoes.push(prevTimer)
+          this.$store.commit('addTimer', prevTimer)
         }
 
         if (!skip && prevTimer) {
@@ -69,7 +70,7 @@
         const type = this.type === 1 ? Timer.TYPE_TOMATO : Timer.TYPE_BREAK
 
         const timer = new Timer({type, bus: this.$store.state.bus})
-        this.$store.state.timer = timer
+        this.$store.commit('setCurrentTimer', timer)
 
         if (this.$store.state.auto) {
           timer.play()

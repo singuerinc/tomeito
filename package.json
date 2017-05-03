@@ -12,10 +12,11 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "yarn run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "pack": "yarn run build && electron-packager ./dist --electron-version 1.6.8 --overwrite --out out"
+    "pack": "yarn run build && electron-packager ./dist --electron-version 1.6.8 --overwrite --out out --all"
   },
   "dependencies": {
     "date-fns": "^1.28.4",
+    "store": "^2.0.4",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
     "vuex": "^2.3.1"
