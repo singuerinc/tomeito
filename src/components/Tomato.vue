@@ -73,7 +73,9 @@
         return store.state.tomatoes
       },
       typeName () {
-        if (store.state.timer.type === Timer.TYPE_TOMATO) {
+        if (!store.state.timer.isRunning()) {
+          return 'type-idle'
+        } else if (store.state.timer.type === Timer.TYPE_TOMATO) {
           return 'type-tomato'
         } else if (store.state.timer.type === Timer.TYPE_BREAK) {
           return 'type-break'
@@ -85,6 +87,11 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+
+  .type-idle {
+    --main-color-1: #ddd;
+    --main-color-2: #ddd;
+  }
 
   .type-tomato {
     --main-color-1: #ab000d;
@@ -102,7 +109,7 @@
 
   .progress {
     display: block;
-    height: 50px;
+    height: 30px;
     width: 100%;
     background: var(--main-color-2);
     margin: 0 auto;
@@ -114,7 +121,7 @@
 
   .progress .inner {
     display: block;
-    height: 50px;
+    height: 30px;
     width: 100%;
     background: var(--main-color-1);
     transition-property: width;
@@ -125,8 +132,8 @@
     margin: 0;
     padding: 0;
     position: absolute;
-    top: 25px;
-    left: 4px;
+    top: 2px;
+    left: 55px;
     z-index: 1;
   }
 
@@ -156,9 +163,9 @@
     position: absolute;
     top: 0;
     right: 0;
-    padding: 13px;
-    width: 50px;
-    height: 50px;
+    padding: 3px;
+    width: 30px;
+    height: 30px;
     background-color: rgba(255, 255, 255, 0);
     opacity: 0;
     transition-property: opacity, background-color;
@@ -179,7 +186,7 @@
   }
 
   .btn.btn-reset {
-    right: 50px;
+    right: 30px;
   }
 
   h1, h2 {
