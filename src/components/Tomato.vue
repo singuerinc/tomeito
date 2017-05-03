@@ -93,7 +93,7 @@
           return `${100 * this.progress}%`
         },
         typeName (state) {
-          if (!state.timer.isRunning()) {
+          if (!state.timer.isRunning() && state.timer.progress === 0) {
             return 'type-idle'
           } else if (state.timer.type === Timer.TYPE_TOMATO) {
             return 'type-tomato'
@@ -146,7 +146,7 @@
     width: 100%;
     background-color: var(--main-color-1);
     transition-property: width, background-color;
-    transition-duration: 250ms;
+    transition-duration: 500ms;
   }
 
   .tomatoes {

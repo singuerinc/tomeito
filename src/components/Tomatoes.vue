@@ -19,6 +19,9 @@
         tick: null
       }
     },
+    beforeCreate () {
+      this.$store.dispatch('loadPreferences')
+    },
     created () {
       this.tick = new Audio()
       this.tick.src = 'static/tick.mp3'
@@ -41,11 +44,6 @@
         this.tick.pause()
         this.onTimerComplete(timer, true)
       })
-
-      this.$store.state.bus.$on('tick', (timer) => {
-      })
-
-      this.onTimerComplete(null, false)
     },
     beforeDestroy () {
 
@@ -57,8 +55,7 @@
     },
     methods: {
       onTimerComplete (prevTimer, skip) {
-//        if (!skip && (prevTimer && prevTimer.type === Timer.TYPE_TOMATO)) {
-        if (prevTimer) {
+        if (!skip && (prevTimer && prevTimer.type === Timer.TYPE_TOMATO)) {
           this.$store.commit('addTimer', prevTimer)
         }
 
