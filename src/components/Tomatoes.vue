@@ -21,6 +21,7 @@
     },
     beforeCreate () {
       this.$store.dispatch('loadPreferences')
+      this.$store.dispatch('initTimer')
     },
     created () {
       this.tick = new Audio()
@@ -65,16 +66,7 @@
           audio.play()
         }
 
-        this.type = this.type * -1
-
-        const type = this.type === 1 ? Timer.TYPE_TOMATO : Timer.TYPE_BREAK
-
-        const timer = new Timer({type, bus: this.$store.state.bus})
-        this.$store.commit('setCurrentTimer', timer)
-
-        if (this.$store.state.auto) {
-          timer.play()
-        }
+        this.$store.dispatch('initTimer')
       }
     }
   }

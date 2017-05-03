@@ -41,6 +41,21 @@ const store = new Vuex.Store({
     }
   },
   actions: {
+    initTimer ({commit, state}) {
+      let type
+
+      if (state.timer && state.timer.type === Timer.TYPE_TOMATO) {
+        type = Timer.TYPE_BREAK
+      } else {
+        type = Timer.TYPE_TOMATO
+      }
+
+      commit('setCurrentTimer', new Timer({bus, type}))
+
+      // if (this.$store.state.auto) {
+      //   timer.play()
+      // }
+    },
     loadPreferences ({commit}) {
       console.log('loading preferences...')
       // volume on?
@@ -59,8 +74,6 @@ const store = new Vuex.Store({
           preferences.remove('timers')
         }
       }
-
-      commit('setCurrentTimer', new Timer({bus, type: Timer.TYPE_TOMATO}))
     }
   }
 })
