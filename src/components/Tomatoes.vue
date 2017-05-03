@@ -21,12 +21,19 @@
       }
     },
     created () {
+      const tick = new Audio()
+      tick.src = 'static/tick.mp3'
+
       this.$store.state.bus.$on('completed', (timer) => {
         this.onTimerComplete(timer, false)
       })
 
       this.$store.state.bus.$on('skipped', (timer) => {
         this.onTimerComplete(timer, true)
+      })
+
+      this.$store.state.bus.$on('tick', (timer) => {
+        tick.play()
       })
 
       this.onTimerComplete(null, false)

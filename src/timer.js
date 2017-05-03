@@ -64,6 +64,7 @@ export default class Timer {
     this.time -= INTERVAL
     this.currentTime = this.initTime + this.time
     this.progress = (this._getTotal() - this.time) / this._getTotal()
+    this.bus.$emit('tick', this)
     if (this.time <= 0) {
       this.complete()
     }
