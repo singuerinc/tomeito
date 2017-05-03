@@ -153,7 +153,7 @@
     padding: 0;
     position: absolute;
     top: 2px;
-    left: 55px;
+    left: 58px;
     z-index: 1;
   }
 
@@ -171,7 +171,7 @@
   .time {
     position: absolute;
     top: 5px;
-    left: 5px;
+    left: 8px;
     color: var(--time-color);
   }
 

@@ -34,6 +34,10 @@
     methods: {
       onTimerComplete (prevTimer, skip) {
         if (!skip && (prevTimer && prevTimer.type === Timer.TYPE_TOMATO)) {
+          const audio = new Audio()
+          audio.src = 'static/tone.mp3'
+          audio.play()
+
           this.$store.state.tomatoes.push(prevTimer)
         }
 
