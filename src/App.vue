@@ -15,13 +15,12 @@ export default {
   font-family: 'Nunito', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #000000;
-  margin-top: 60px;
 }
 
 html, body {
-  height: 50px;
+  height: 30px;
   overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 </style>
