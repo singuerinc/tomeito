@@ -8,7 +8,7 @@ let win
 
 function createWindow () {
   // Create the browser window.
-  win = new BrowserWindow({width: 300, height: 50, frame: false, title: 'Tomeito', resizable: false, acceptFirstMouse: true, minimizable: true, maximizable: false, alwaysOnTop: true})
+  win = new BrowserWindow({width: 300, height: 30, frame: false, title: 'Tomeito', resizable: false, acceptFirstMouse: true, minimizable: true, maximizable: false, alwaysOnTop: true})
 
   // and load the index.html of the app.
   win.loadURL(url.format({

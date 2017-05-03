@@ -12,19 +12,25 @@
     <!--<h2>{{currentTime}}</h2>-->
     <!--<h2>{{endTime}}</h2>-->
     <!--<h2>{{progress}}</h2>-->
-    <div class="btn btn-play" v-show="!$store.state.timer.isRunning()" @click.stop="playPause()">
+    <div class="btn btn-play" v-show="!isRunning" @click.stop="playPause()">
       <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
         <path d="M8 5v14l11-7z"/>
         <path d="M0 0h24v24H0z" fill="none"/>
       </svg>
     </div>
-    <div class="btn btn-pause" v-show="$store.state.timer.isRunning()" @click.stop="playPause()">
+    <div class="btn btn-pause" v-show="isRunning" @click.stop="playPause()">
       <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         <path d="M0 0h24v24H0z" fill="none"/>
       </svg>
     </div>
-    <div class="btn btn-reset" v-show="!$store.state.timer.isRunning() && $store.state.timer.progress !== 0" @click.stop="$store.state.timer.reset()">
+    <div class="btn btn-fast-forward" v-show="isRunning" @click.stop="skip()">
+      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>
+        <path d="M0 0h24v24H0z" fill="none"/>
+      </svg>
+    </div>
+    <div class="btn btn-reset" v-show="!isRunning && $store.state.timer.progress !== 0" @click.stop="$store.state.timer.reset()">
       <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 0h24v24H0z" fill="none"/>
         <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
@@ -48,6 +54,9 @@
         } else {
           store.state.timer.play()
         }
+      },
+      skip () {
+        store.state.timer.skip()
       }
     },
     computed: {
@@ -72,6 +81,12 @@
       tomatoes () {
         return store.state.tomatoes
       },
+      isRunning () {
+        return store.state.timer.isRunning()
+      },
+      isBreak () {
+        return store.state.timer.type === Timer.TYPE_BREAK
+      },
       typeName () {
         if (!store.state.timer.isRunning()) {
           return 'type-idle'
@@ -91,16 +106,19 @@
   .type-idle {
     --main-color-1: #ddd;
     --main-color-2: #ddd;
+    --time-color: #9e9e9e;
   }
 
   .type-tomato {
     --main-color-1: #ab000d;
     --main-color-2: #e53935;
+    --time-color: #ef9a9a;
   }
 
   .type-break {
     --main-color-1: #387002;
     --main-color-2: #689f38;
+    --time-color: #8BC34A;
   }
 
   * {
@@ -111,20 +129,22 @@
     display: block;
     height: 30px;
     width: 100%;
-    background: var(--main-color-2);
+    background-color: var(--main-color-2);
     margin: 0 auto;
     text-align: left;
     position: absolute;
     top: 0;
     left: 0;
+    transition-property: background-color;
+    transition-duration: 500ms;
   }
 
   .progress .inner {
     display: block;
     height: 30px;
     width: 100%;
-    background: var(--main-color-1);
-    transition-property: width;
+    background-color: var(--main-color-1);
+    transition-property: width, background-color;
     transition-duration: 250ms;
   }
 
@@ -152,6 +172,7 @@
     position: absolute;
     top: 5px;
     left: 5px;
+    color: var(--time-color);
   }
 
   .tomato:hover .btn {
@@ -185,7 +206,7 @@
   .btn.btn-play, .btn.btn-pause {
   }
 
-  .btn.btn-reset {
+  .btn.btn-reset, .btn.btn-fast-forward {
     right: 30px;
   }
 

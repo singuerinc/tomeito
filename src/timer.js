@@ -6,7 +6,7 @@ export default class Timer {
   constructor ({bus, type}) {
     this.type = type
     this.bus = bus
-    this.complete = false
+    this.completed = false
     this.time = this.type
     this.progress = 0
     this.initTime = null
@@ -21,7 +21,7 @@ export default class Timer {
   }
 
   play () {
-    if (this.complete) return
+    if (this.completed) return
     if (!this._isRunning) {
       this._isRunning = true
       this._interval = setInterval(this.tick.bind(this), INTERVAL)
@@ -40,7 +40,7 @@ export default class Timer {
   }
 
   reset () {
-    if (this.complete) return
+    if (this.completed) return
     this.time = this.type
     this.progress = 0
     this.initTime = new Date().getTime()
@@ -48,14 +48,24 @@ export default class Timer {
     this.endTime = this.initTime + this._getTotal()
   }
 
+  complete () {
+    this.pause()
+    this.completed = true
+    this.bus.$emit('completed', this)
+  }
+
+  skip () {
+    this.pause()
+    this.completed = false
+    this.bus.$emit('skipped', this)
+  }
+
   tick () {
     this.time -= INTERVAL
     this.currentTime = this.initTime + this.time
     this.progress = (this._getTotal() - this.time) / this._getTotal()
     if (this.time <= 0) {
-      this.pause()
-      this.complete = true
-      this.bus.$emit('complete', this)
+      this.complete()
     }
   }
 

@@ -21,21 +21,29 @@
       }
     },
     created () {
-      this.$store.state.bus.$on('complete', () => {
-        this.onTimerComplete()
+      this.$store.state.bus.$on('completed', (timer) => {
+        this.onTimerComplete(timer, false)
       })
-      this.onTimerComplete()
+
+      this.$store.state.bus.$on('skipped', (timer) => {
+        this.onTimerComplete(timer, true)
+      })
+
+      this.onTimerComplete(null, false)
     },
     methods: {
-      onTimerComplete () {
-        // UI: https://dribbble.com/shots/2927583-Pomodoro-timer
+      onTimerComplete (prevTimer, skip) {
+        if (!skip && (prevTimer && prevTimer.type === Timer.TYPE_TOMATO)) {
+          this.$store.state.tomatoes.push(prevTimer)
+        }
+
         this.type = this.type * -1
 
         const type = this.type === 1 ? Timer.TYPE_TOMATO : Timer.TYPE_BREAK
 
         const timer = new Timer({type, bus: this.$store.state.bus})
         this.$store.state.timer = timer
-        this.$store.state.tomatoes.push(timer)
+
         if (this.$store.state.auto) {
           timer.play()
         }
