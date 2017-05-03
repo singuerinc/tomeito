@@ -13,25 +13,25 @@
     <!--<h2>{{endTime}}</h2>-->
     <!--<h2>{{progress}}</h2>-->
     <div class="btn btn-play" v-show="!isRunning" @click.stop="playPause()">
-      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
         <path d="M8 5v14l11-7z"/>
         <path d="M0 0h24v24H0z" fill="none"/>
       </svg>
     </div>
     <div class="btn btn-pause" v-show="isRunning" @click.stop="playPause()">
-      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+      <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
         <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
         <path d="M0 0h24v24H0z" fill="none"/>
       </svg>
     </div>
     <div class="btn btn-fast-forward" v-show="isRunning" @click.stop="skip()">
-      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+      <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
         <path d="M4 18l8.5-6L4 6v12zm9-12v12l8.5-6L13 6z"/>
         <path d="M0 0h24v24H0z" fill="none"/>
       </svg>
     </div>
     <div class="btn btn-reset" v-show="!isRunning && $store.state.timer.progress !== 0" @click.stop="$store.state.timer.reset()">
-      <svg fill="#000000" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+      <svg fill="#ffffff" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 0h24v24H0z" fill="none"/>
         <path d="M12 5V1L7 6l5 5V7c3.31 0 6 2.69 6 6s-2.69 6-6 6-6-2.69-6-6H4c0 4.42 3.58 8 8 8s8-3.58 8-8-3.58-8-8-8z"/>
       </svg>
@@ -104,8 +104,8 @@
 <style scoped>
 
   .type-idle {
-    --main-color-1: #ddd;
-    --main-color-2: #ddd;
+    --main-color-1: #666;
+    --main-color-2: #666;
     --time-color: #9e9e9e;
   }
 
@@ -194,6 +194,7 @@
   }
 
   .btn svg {
+    pointer-events: none;
     opacity: 0.8;
     margin: 0;
     padding: 0;
