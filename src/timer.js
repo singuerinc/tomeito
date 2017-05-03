@@ -1,6 +1,8 @@
 const INTERVAL = 1000
-const TYPE_TOMATO = 1000 * 60 * 25
-const TYPE_BREAK = 1000 * 60 * 5
+const TYPE_TOMATO = 1000 * 10
+const TYPE_BREAK = 1000 * 5
+// const TYPE_TOMATO = 1000 * 60 * 25
+// const TYPE_BREAK = 1000 * 60 * 5
 
 export default class Timer {
   constructor ({bus, type}) {

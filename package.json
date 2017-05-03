@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "date-fns": "^1.28.4",
+    "store": "^2.0.4",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
     "vuex": "^2.3.1"
