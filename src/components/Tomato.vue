@@ -203,14 +203,15 @@
     background-color: rgba(255, 255, 255, 0.1);
   }
 
-  .btn.btn-play, .btn.btn-pause {
+  .btn-volume-on, .btn-volume-off {
+    right: 0;
   }
 
-  .btn.btn-reset, .btn.btn-fast-forward {
+  .btn.btn-play, .btn.btn-pause {
     right: 30px;
   }
 
-  .btn-volume-on, .btn-volume-off {
+  .btn.btn-reset, .btn.btn-fast-forward {
     right: 60px;
   }
 
