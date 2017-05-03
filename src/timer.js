@@ -25,6 +25,7 @@ export default class Timer {
     if (!this._isRunning) {
       this._isRunning = true
       this._interval = setInterval(this.tick.bind(this), INTERVAL)
+      this.bus.$emit('started', this)
     }
 
     if (!this.initTime) {
@@ -36,6 +37,7 @@ export default class Timer {
     if (this._isRunning) {
       this._isRunning = false
       this._interval = clearInterval(this._interval)
+      this.bus.$emit('paused', this)
     }
   }
 

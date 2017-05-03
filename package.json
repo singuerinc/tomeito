@@ -1,5 +1,5 @@
 {
-  "name": "tomeito",
+  "name": "Tomeito",
   "version": "1.0.0",
   "description": "Tomeito",
   "author": "singuerinc <nahuel.scotti@gmail.com>",
@@ -10,8 +10,9 @@
     "start": "node build/dev-server.js",
     "build": "node build/build.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "test": "npm run unit",
-    "lint": "eslint --ext .js,.vue src test/unit/specs"
+    "test": "yarn run unit",
+    "lint": "eslint --ext .js,.vue src test/unit/specs",
+    "pack": "yarn run build && electron-packager ./dist --electron-version 1.6.8 --overwrite --out out"
   },
   "dependencies": {
     "date-fns": "^1.28.4",
@@ -35,6 +36,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^4.0.0",
     "css-loader": "^0.28.0",
+    "electron-packager": "^8.7.0",
     "eslint": "^3.19.0",
     "eslint-config-standard": "^6.2.1",
     "eslint-friendly-formatter": "^2.0.7",

@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <tomato></tomato>
-  </div>
+  <tomato></tomato>
 </template>
 
 <script>
@@ -17,26 +15,42 @@
     },
     data () {
       return {
-        type: -1
+        type: -1,
+        tick: null
       }
     },
     created () {
-      const tick = new Audio()
-      tick.src = 'static/tick.mp3'
+      this.tick = new Audio()
+      this.tick.src = 'static/tick.mp3'
+      this.tick.loop = true
 
       this.$store.state.bus.$on('completed', (timer) => {
+        this.tick.pause()
         this.onTimerComplete(timer, false)
       })
 
+      this.$store.state.bus.$on('started', () => {
+        this.tick.play()
+      })
+
+      this.$store.state.bus.$on('paused', () => {
+        this.tick.pause()
+      })
+
       this.$store.state.bus.$on('skipped', (timer) => {
+        this.tick.pause()
         this.onTimerComplete(timer, true)
       })
 
       this.$store.state.bus.$on('tick', (timer) => {
-        tick.play()
       })
 
       this.onTimerComplete(null, false)
+    },
+    watch: {
+      '$store.state.volume': function (value) {
+        this.tick.volume = value ? 1 : 0
+      }
     },
     methods: {
       onTimerComplete (prevTimer, skip) {
