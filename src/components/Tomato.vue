@@ -40,7 +40,7 @@
       </svg>
     </div>
     <div class="btn btn-reset" v-show="!isRunning && progress !== 0"
-         @click.stop="$store.state.timer.reset()">
+         @click.stop="reset()">
       <svg fill="#ffffff" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 0h24v24H0z" fill="none"/>
         <path
@@ -69,6 +69,9 @@
         } else {
           this.$store.state.timer.play()
         }
+      },
+      reset () {
+        this.$store.state.timer.reset(true)
       },
       skip () {
         this.$store.state.timer.skip()

@@ -33,6 +33,7 @@ export default class Timer {
 
     if (!this.initTime) {
       this.reset()
+      _bus.$emit('init', this)
     }
   }
 
@@ -44,11 +45,11 @@ export default class Timer {
     }
   }
 
-  reset () {
+  reset (hard) {
     if (this.completed) return
     this.time = this.type
     this.progress = 0
-    this.initTime = new Date().getTime()
+    this.initTime = hard ? null : new Date().getTime()
     this.currentTime = this.initTime
     this.endTime = this.initTime + this._getTotal()
   }

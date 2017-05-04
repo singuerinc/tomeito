@@ -16,7 +16,8 @@
     data () {
       return {
         type: -1,
-        tick: null
+        tick: null,
+        tone: null
       }
     },
     beforeCreate () {
@@ -24,13 +25,26 @@
       this.$store.dispatch('initTimer')
     },
     created () {
+      this.init = new Audio()
+      this.init.src = 'static/init.mp3'
+      // this.init.volume = this.$store.getters.volumeLevel
+
+      this.tone = new Audio()
+      this.tone.src = 'static/tone.mp3'
+      // this.tone.volume = this.$store.getters.volumeLevel
+
       this.tick = new Audio()
       this.tick.src = 'static/tick.mp3'
+      this.tick.volume = this.$store.getters.volumeLevel
       this.tick.loop = true
 
       this.$store.state.bus.$on('completed', (timer) => {
         this.tick.pause()
         this.onTimerComplete(timer, false)
+      })
+
+      this.$store.state.bus.$on('init', () => {
+        this.init.play()
       })
 
       this.$store.state.bus.$on('started', () => {
@@ -50,8 +64,8 @@
 
     },
     watch: {
-      '$store.state.volume': function (value) {
-        this.tick.volume = value ? 0.5 : 0
+      '$store.state.volume': function () {
+        this.tick.volume = this.$store.getters.volumeLevel
       }
     },
     methods: {
@@ -61,9 +75,7 @@
         }
 
         if (!skip && prevTimer) {
-          const audio = new Audio()
-          audio.src = 'static/tone.mp3'
-          audio.play()
+          this.tone.play()
         }
 
         this.$store.dispatch('initTimer')
