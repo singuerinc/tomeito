@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import Timer from './timer'
 import { isSameDay } from 'date-fns'
 import * as preferences from 'store'
+import { ipcRenderer } from 'electron'
 
 Vue.use(Vuex)
 
@@ -12,6 +13,7 @@ const store = new Vuex.Store({
   state: {
     bus,
     volume: false,
+    alwaysOnTop: false,
     timers: [],
     timer: null,
     auto: false
@@ -31,9 +33,13 @@ const store = new Vuex.Store({
       state.timers = timers
     },
     setVolume (state, value) {
-      console.log('set volume', value)
       state.volume = value
       preferences.set('volume', value)
+    },
+    setAlwaysOnTop (state, value) {
+      state.alwaysOnTop = value
+      ipcRenderer.send('always-on-top', state.alwaysOnTop)
+      preferences.set('alwaysOnTop', value)
     }
   },
   getters: {
@@ -65,6 +71,11 @@ const store = new Vuex.Store({
       // volume on?
       if (typeof preferences.get('volume') !== 'undefined') {
         commit('setVolume', preferences.get('volume'))
+      }
+
+      // alwaysOnTop on?
+      if (typeof preferences.get('alwaysOnTop') !== 'undefined') {
+        commit('setAlwaysOnTop', preferences.get('alwaysOnTop'))
       }
 
       // today's timers

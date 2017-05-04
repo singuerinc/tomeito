@@ -1,3 +1,4 @@
+var path = require('path')
 var utils = require('./utils')
 var webpack = require('webpack')
 var config = require('../config')
@@ -17,6 +18,12 @@ module.exports = merge(baseWebpackConfig, {
   },
   // cheap-module-eval-source-map is faster for development
   devtool: '#cheap-module-eval-source-map',
+  resolve: {
+    extensions: ['.js', '.vue', '.json'],
+    alias: {
+      'electron': path.join(__dirname, '..', './electron_mock.js')
+    }
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': config.dev.env
