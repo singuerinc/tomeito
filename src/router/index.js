@@ -9,12 +9,12 @@ const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'Intro',
+      name: 'intro',
       component: Intro
     },
     {
       path: '/tomatoes',
-      name: 'Tomatoes',
+      name: 'tomatoes',
       component: Tomatoes
     }
   ]
