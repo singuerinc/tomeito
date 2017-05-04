@@ -31,6 +31,7 @@ const store = new Vuex.Store({
       state.timers = timers
     },
     setVolume (state, value) {
+      console.log('set volume', value)
       state.volume = value
       preferences.set('volume', value)
     }
