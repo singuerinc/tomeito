@@ -22,5 +22,6 @@ html, body {
   overflow: hidden;
   margin: 0;
   padding: 0;
+  border: 1px solid black;
 }
 </style>

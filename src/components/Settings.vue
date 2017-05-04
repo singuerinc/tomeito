@@ -18,6 +18,20 @@
         </div>
       </li>
       <li>
+        <div class="btn btn-always-on-top-on" v-show="alwaysOnTop === true" @click.stop="setAlwaysOnTop(false)">
+          <svg fill="#FFFFFF" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>
+          </svg>
+        </div>
+        <div class="btn btn-always-on-top-off" v-show="alwaysOnTop === false" @click.stop="setAlwaysOnTop(true)">
+          <svg fill="#FFFFFF" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M19.81 14.99l1.19-.92-1.43-1.43-1.19.92 1.43 1.43zm-.45-4.72L21 9l-9-7-2.91 2.27 7.87 7.88 2.4-1.88zM3.27 1L2 2.27l4.22 4.22L3 9l1.63 1.27L12 16l2.1-1.63 1.43 1.43L12 18.54l-7.37-5.73L3 14.07l9 7 4.95-3.85L20.73 21 22 19.73 3.27 1z"/>
+          </svg>
+        </div>
+      </li>
+      <li>
         <div class="btn btn-settings" @click.stop="closeSettings()">
           <svg fill="#000" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
             <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
@@ -39,7 +53,8 @@
     store,
     methods: {
       ...mapMutations([
-        'setVolume'
+        'setVolume',
+        'setAlwaysOnTop'
       ]),
       closeSettings () {
         this.$emit('close')
@@ -47,7 +62,8 @@
     },
     computed: {
       ...mapState({
-        volume: state => state.volume
+        volume: state => state.volume,
+        alwaysOnTop: state => state.alwaysOnTop
       })
     }
   }
