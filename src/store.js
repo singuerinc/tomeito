@@ -11,7 +11,7 @@ const bus = new Vue()
 const store = new Vuex.Store({
   state: {
     bus,
-    volume: true,
+    volume: false,
     timers: [],
     timer: null,
     auto: false
@@ -38,6 +38,9 @@ const store = new Vuex.Store({
   getters: {
     tomatoes: state => {
       return state.timers.filter(timer => (timer.completed && timer.type === Timer.TYPE_TOMATO))
+    },
+    volumeLevel: state => {
+      return state.volume ? 0.5 : 0
     }
   },
   actions: {
