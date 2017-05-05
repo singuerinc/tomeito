@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Timer from './timer'
-import { isSameDay } from 'date-fns'
 import * as preferences from 'store'
 import { ipcRenderer } from 'electron'
 
@@ -24,10 +23,6 @@ const store = new Vuex.Store({
     },
     addTimer (state, timer) {
       state.timers.push(timer)
-      preferences.set('timers', {
-        date: new Date().toDateString(),
-        timers: state.timers
-      })
     },
     addTimers (state, timers) {
       state.timers = timers
@@ -85,18 +80,6 @@ const store = new Vuex.Store({
       // autoPlay on?
       if (typeof preferences.get('autoPlay') !== 'undefined') {
         commit('setAutoPlay', preferences.get('autoPlay'))
-      }
-
-      // today's timers
-      if (typeof preferences.get('timers') !== 'undefined') {
-        const timers = preferences.get('timers')
-        const timersDate = Date.parse(timers.date)
-
-        if (isSameDay(timersDate, new Date())) {
-          commit('addTimers', timers.timers)
-        } else {
-          preferences.remove('timers')
-        }
       }
     }
   }
