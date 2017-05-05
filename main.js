@@ -15,14 +15,13 @@ function createWindow () {
     backgroundColor: '#666',
     center: true,
     width: 300,
-    height: 300,
+    height: 30,
     frame: false,
     title: 'Tomeito',
     resizable: true,
     acceptFirstMouse: true,
     minimizable: true,
-    maximizable: false,
-    alwaysOnTop: true
+    maximizable: false
   })
 
   // and load the index.html of the app.
