@@ -13,7 +13,9 @@ const store = new Vuex.Store({
     bus,
     volume: false,
     alwaysOnTop: false,
-    timers: [],
+    timers: [
+      // new Timer(bus, {type: Timer.TYPE_TOMATO, completed: true})
+    ],
     timer: null,
     autoPlay: false
   },
@@ -43,23 +45,32 @@ const store = new Vuex.Store({
   },
   getters: {
     tomatoes: state => {
-      return state.timers.filter(timer => (timer.completed && timer.type === Timer.TYPE_TOMATO))
+      return state.timers.filter(timer => (timer.completed && timer.type === Timer.TYPE_TOMATO)).slice(-8)
     },
     volumeLevel: state => {
       return state.volume ? 0.5 : 0
     }
   },
   actions: {
-    initTimer ({commit, state}) {
+    initTimer ({commit, state, getters}) {
       let type
+      const totalTomatoes = getters.tomatoes.length
 
-      if (state.timer && state.timer.type === Timer.TYPE_TOMATO) {
+      // check that is not the first tomato,
+      // that we are in the % 4 tomato,
+      // and the current pomodoro is not a long break
+      if (totalTomatoes !== 0 && getters.tomatoes.length % 4 === 0 && state.timer && state.timer.type !== Timer.TYPE_LONG_BREAK) {
+        type = Timer.TYPE_LONG_BREAK
+      } else if (state.timer && state.timer.type === Timer.TYPE_TOMATO) {
         type = Timer.TYPE_BREAK
       } else {
         type = Timer.TYPE_TOMATO
       }
 
-      commit('setCurrentTimer', new Timer({bus, type}))
+      const timer = new Timer(bus, {type})
+
+      console.log('timer', timer)
+      commit('setCurrentTimer', timer)
 
       if (state.autoPlay) {
         state.timer.play()
