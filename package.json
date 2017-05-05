@@ -1,6 +1,6 @@
 {
   "name": "Tomeito",
-  "version": "1.0.0",
+  "version": "0.0.9",
   "description": "Tomeito",
   "author": "singuerinc <nahuel.scotti@gmail.com>",
   "main": "main.js",
@@ -12,7 +12,7 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "yarn run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "pack": "yarn run build && electron-packager ./dist --electron-version 1.6.8 --overwrite --out out"
+    "pack": "yarn run build && electron-packager ./dist --electron-version 1.6.8 --overwrite --out out --sign='singuerinc'"
   },
   "dependencies": {
     "date-fns": "^1.28.4",

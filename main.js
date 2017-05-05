@@ -1,9 +1,18 @@
-const {app, BrowserWindow, ipcMain} = require('electron')
+const appVersion = require('./package.json').version
+const {app, BrowserWindow, autoUpdater, ipcMain} = require('electron')
 const path = require('path')
 const url = require('url')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
+
+const updateFeed = 'https://secret-plains-95341.herokuapp.com/updates/latest'
+
+autoUpdater.setFeedURL(updateFeed + '?v=' + appVersion)
+autoUpdater.checkForUpdates() // check day
+autoUpdater.on('update-downloaded', () => {
+  autoUpdater.quitAndInstall()
+})
 
 ipcMain.on('always-on-top', (event, arg) => {
   win.setAlwaysOnTop(arg)

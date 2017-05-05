@@ -19,7 +19,6 @@ export default class Timer {
     this.endTime = null
     this._isRunning = false
     this._interval = null
-    console.log(this)
   }
 
   isRunning () {
