@@ -27,11 +27,9 @@
     created () {
       this.init = new Audio()
       this.init.src = 'static/init.mp3'
-      // this.init.volume = this.$store.getters.volumeLevel
 
       this.tone = new Audio()
       this.tone.src = 'static/tone.mp3'
-      // this.tone.volume = this.$store.getters.volumeLevel
 
       this.tick = new Audio()
       this.tick.src = 'static/tick.mp3'
@@ -44,7 +42,9 @@
       })
 
       this.$store.state.bus.$on('init', () => {
-        this.init.play()
+        if (this.$store.state.autoPlay === false) {
+          this.init.play()
+        }
       })
 
       this.$store.state.bus.$on('started', () => {

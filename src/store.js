@@ -16,7 +16,7 @@ const store = new Vuex.Store({
     alwaysOnTop: false,
     timers: [],
     timer: null,
-    auto: false
+    autoPlay: false
   },
   mutations: {
     setCurrentTimer (state, timer) {
@@ -35,6 +35,10 @@ const store = new Vuex.Store({
     setVolume (state, value) {
       state.volume = value
       preferences.set('volume', value)
+    },
+    setAutoPlay (state, value) {
+      state.autoPlay = value
+      preferences.set('autoPlay', value)
     },
     setAlwaysOnTop (state, value) {
       state.alwaysOnTop = value
@@ -62,9 +66,9 @@ const store = new Vuex.Store({
 
       commit('setCurrentTimer', new Timer({bus, type}))
 
-      // if (this.$store.state.auto) {
-      //   timer.play()
-      // }
+      if (state.autoPlay) {
+        state.timer.play()
+      }
     },
     loadPreferences ({commit}) {
       console.log('loading preferences...')
@@ -76,6 +80,11 @@ const store = new Vuex.Store({
       // alwaysOnTop on?
       if (typeof preferences.get('alwaysOnTop') !== 'undefined') {
         commit('setAlwaysOnTop', preferences.get('alwaysOnTop'))
+      }
+
+      // autoPlay on?
+      if (typeof preferences.get('autoPlay') !== 'undefined') {
+        commit('setAutoPlay', preferences.get('autoPlay'))
       }
 
       // today's timers
