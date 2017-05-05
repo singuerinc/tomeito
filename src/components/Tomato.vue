@@ -1,8 +1,8 @@
 <template>
   <div class="tomato" v-bind:class="typeName">
     <ul class="tomatoes">
-      <li v-for="item in tomatoes"></li>
-      <li class="current" v-show="!isBreak && progress !== 0" v-bind:class="{'pulse': isRunning}"></li>
+      <li v-for="(item, index) in tomatoes" v-bind:class="{'space': (index !== 0 && index % 4 === 0) }"></li>
+      <li class="current" v-show="isTomato && progress !== 0" v-bind:class="{'pulse': isRunning}"></li>
     </ul>
     <div class="progress">
       <div class="inner" :style="{'width': width}"></div>
@@ -98,6 +98,7 @@
         progress: state => state.timer.progress,
         isRunning: state => state.timer.isRunning(),
         isBreak: state => state.timer.type === Timer.TYPE_BREAK,
+        isTomato: state => state.timer.type === Timer.TYPE_TOMATO,
         time (state) {
           return format(new Date(state.timer.time), 'mm:ss')
         },
@@ -109,6 +110,8 @@
             return 'type-idle'
           } else if (state.timer.type === Timer.TYPE_TOMATO) {
             return 'type-tomato'
+          } else if (state.timer.type === Timer.TYPE_LONG_BREAK) {
+            return 'type-long-break'
           } else if (state.timer.type === Timer.TYPE_BREAK) {
             return 'type-break'
           }
@@ -130,6 +133,12 @@
     --main-color-1: #ab000d;
     --main-color-2: #e53935;
     --time-color: #ef9a9a;
+  }
+
+  .type-long-break {
+    --main-color-1: #3f51b5;
+    --main-color-2: #5c6bc0;
+    --time-color: #9fa8da;
   }
 
   .type-break {
@@ -181,6 +190,10 @@
     background: black;
     opacity: 0.2;
     float: left;
+  }
+
+  .tomatoes li.space {
+    margin: 13px 2px 13px 6px;
   }
 
   @keyframes fade {

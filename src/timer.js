@@ -1,15 +1,17 @@
 const INTERVAL = 1000
 // const TYPE_TOMATO = 1000 * 10
-// const TYPE_BREAK = 1000 * 5
+// const TYPE_BREAK = 1000 * 2
+// const TYPE_LONG_BREAK = 1000 * 5
 const TYPE_TOMATO = 1000 * 60 * 25
 const TYPE_BREAK = 1000 * 60 * 5
+const TYPE_LONG_BREAK = 1000 * 60 * 15
 let _bus
 
 export default class Timer {
-  constructor ({bus, type}) {
+  constructor (bus, {type, completed = false}) {
     _bus = bus
     this.type = type
-    this.completed = false
+    this.completed = completed
     this.time = this.type
     this.progress = 0
     this.initTime = null
@@ -17,6 +19,7 @@ export default class Timer {
     this.endTime = null
     this._isRunning = false
     this._interval = null
+    console.log(this)
   }
 
   isRunning () {
@@ -83,3 +86,4 @@ export default class Timer {
 
 Timer.TYPE_TOMATO = TYPE_TOMATO
 Timer.TYPE_BREAK = TYPE_BREAK
+Timer.TYPE_LONG_BREAK = TYPE_LONG_BREAK
