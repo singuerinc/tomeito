@@ -2,6 +2,7 @@
   <div class="tomato" v-bind:class="typeName">
     <ul class="tomatoes">
       <li v-for="item in tomatoes"></li>
+      <li class="current" v-show="!isBreak && progress !== 0" v-bind:class="{'pulse': isRunning}"></li>
     </ul>
     <div class="progress">
       <div class="inner" :style="{'width': width}"></div>
@@ -162,21 +163,34 @@
 
   .tomatoes {
     position: absolute;
-    top: 2px;
+    top: 0;
     left: 58px;
     margin: 0;
     padding: 0;
     z-index: 1;
+    list-style-type: none;
   }
 
   .tomatoes li {
-    display: inline-block;
+    list-style-type: none;
+    display: block;
     width: 4px;
     height: 4px;
-    margin: 0 2px;
+    margin: 13px 2px;
     border-radius: 100%;
     background: black;
     opacity: 0.2;
+    float: left;
+  }
+
+  @keyframes fade {
+    0%   { opacity:0.2; }
+    50%  { opacity:0; }
+    100% { opacity:0.2; }
+  }
+
+  .tomatoes li.current.pulse {
+    animation: fade 2s infinite;
   }
 
   .time {
