@@ -1,27 +1,15 @@
-# tomeito
+# Tomeito
 
-> Tomeito
+## Release
 
-## Build Setup
+1. Keychain Access > Menu > Certificate Assistant > Create a Certificate Authority > Name: singuerinc
+2. Pack the app and sign
 
-``` bash
-# install dependencies
-npm install
-
-# serve with hot reload at localhost:8080
-npm run dev
-
-# build for production with minification
-npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
-
-# run unit tests
-npm run unit
-
-# run all tests
-npm test
+```bash
+yarn run pack
+codesign --deep --force --verbose --sign 'singuerinc' ./out/Tomeito-darwin-x64/Tomeito.app
 ```
 
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Auto-update
+
+Before release a new version, update the package.json file with the new version. Then update the tomeito-updater heroku app: `https://git.heroku.com/secret-plains-95341.git`

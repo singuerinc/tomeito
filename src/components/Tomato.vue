@@ -9,10 +9,17 @@
     </div>
     <div class="time">{{time}}</div>
 
-    <div class="btn btn-settings" @click.stop="openSettings()">
+    <div class="btn btn-update" v-show="updateAvailable" @click.stop="updateApp()">
+      <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
+        <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
+        <path d="M0 0h24v24H0z" fill="none"/>
+      </svg>
+    </div>
+    <div class="btn btn-settings" v-show="!updateAvailable" @click.stop="openSettings()">
       <svg fill="#ffffff" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
         <path d="M0 0h24v24H0z" fill="none"/>
-        <path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
+        <path
+          d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
       </svg>
     </div>
     <div class="btn btn-play" v-show="!isRunning" @click.stop="playPause()">
@@ -52,6 +59,7 @@
   import Timer from '../timer'
   import Settings from './Settings.vue'
   import { mapState, mapGetters, mapMutations } from 'vuex'
+  import { ipcRenderer } from 'electron'
 
   export default {
     name: 'tomato',
@@ -60,8 +68,13 @@
     components: {
       'settings': Settings
     },
+    created () {
+      this.updateInterval = setInterval(this.checkAppUpdate.bind(this), 1 * 1000 * 60)
+    },
     data () {
       return {
+        updateAvailable: false,
+        updateInterval: null,
         showSettings: false
       }
     },
@@ -69,6 +82,12 @@
       ...mapMutations([
         'setVolume'
       ]),
+      checkAppUpdate () {
+        this.updateAvailable = ipcRenderer.sendSync('has-app-update')
+        if (this.updateAvailable) {
+          clearInterval(this.updateInterval)
+        }
+      },
       playPause: function () {
         if (this.$store.state.timer.isRunning()) {
           this.$store.state.timer.pause()
@@ -84,6 +103,9 @@
       },
       openSettings () {
         this.showSettings = true
+      },
+      updateApp () {
+        ipcRenderer.send('update-app')
       }
     },
     computed: {
@@ -171,7 +193,7 @@
   }
 
   .tomatoes {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 58px;
     margin: 0;
@@ -185,7 +207,7 @@
     display: block;
     width: 4px;
     height: 4px;
-    margin: 13px 2px;
+    margin: 14px 2px;
     border-radius: 100%;
     background: black;
     opacity: 0.2;
@@ -197,9 +219,15 @@
   }
 
   @keyframes fade {
-    0%   { opacity:0.2; }
-    50%  { opacity:0; }
-    100% { opacity:0.2; }
+    0% {
+      opacity: 0.2;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 0.2;
+    }
   }
 
   .tomatoes li.current.pulse {
@@ -256,5 +284,20 @@
 
   .btn.btn-reset, .btn.btn-fast-forward {
     right: 60px;
+  }
+
+  .btn.btn-update {
+    z-index: 99;
+    opacity: 1;
+    padding: 3px;
+    background-color: #387002;
+  }
+
+  .btn.btn-update svg {
+    opacity: 1;
+  }
+
+  .btn.btn-update:hover {
+    background-color: #52a204;
   }
 </style>

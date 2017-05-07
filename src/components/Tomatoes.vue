@@ -1,5 +1,7 @@
 <template>
-  <tomato></tomato>
+  <div>
+    <tomato></tomato>
+  </div>
 </template>
 
 <script>
@@ -84,4 +86,12 @@
   }
 </script>
 <style scoped>
+  .app-update {
+    width: 100%;
+    background-color: rgba(255, 0, 0, 0.4);
+    height: 30px;
+    z-index: 1;
+    display: block;
+    position: absolute;
+  }
 </style>
