@@ -12,7 +12,9 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "yarn run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "pack": "yarn run build && electron-packager ./dist --electron-version 1.6.8 --overwrite --out out --sign='singuerinc'"
+    "build:electron": "electron-packager ./dist --electron-version 1.6.8 --overwrite --out out",
+    "pack": "yarn run build && yarn run build:electron && yarn run sign",
+    "sign": "codesign --deep --force --verbose --sign 'singuerinc' ./out/Tomeito-darwin-x64/Tomeito.app"
   },
   "dependencies": {
     "date-fns": "^1.28.4",
