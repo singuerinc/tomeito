@@ -171,7 +171,7 @@
   }
 
   .tomatoes {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 58px;
     margin: 0;
@@ -185,7 +185,7 @@
     display: block;
     width: 4px;
     height: 4px;
-    margin: 13px 2px;
+    margin: 14px 2px;
     border-radius: 100%;
     background: black;
     opacity: 0.2;

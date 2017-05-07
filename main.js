@@ -8,11 +8,11 @@ let win
 
 const updateFeed = 'https://secret-plains-95341.herokuapp.com/updates/latest'
 
-autoUpdater.setFeedURL(updateFeed + '?v=' + appVersion)
-autoUpdater.checkForUpdates() // check day
-autoUpdater.on('update-downloaded', () => {
-  autoUpdater.quitAndInstall()
-})
+// autoUpdater.setFeedURL(updateFeed + '?v=' + appVersion)
+// autoUpdater.checkForUpdates() // check day
+// autoUpdater.on('update-downloaded', () => {
+//   autoUpdater.quitAndInstall()
+// })
 
 ipcMain.on('always-on-top', (event, arg) => {
   win.setAlwaysOnTop(arg)
@@ -21,16 +21,16 @@ ipcMain.on('always-on-top', (event, arg) => {
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
-    backgroundColor: '#666',
+    transparent: true,
     center: true,
     width: 300,
-    height: 30,
+    height: 38,
     frame: false,
     title: 'Tomeito',
-    resizable: true,
     acceptFirstMouse: true,
     minimizable: true,
-    maximizable: false
+    maximizable: false,
+    hasShadow: false
   })
 
   // and load the index.html of the app.

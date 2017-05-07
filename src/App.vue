@@ -15,6 +15,11 @@ export default {
   font-family: 'Nunito', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  top: 4px;
+  position: absolute;
+  height: 30px;
+  left: 0;
+  width: 100%;
 }
 
 html, body {
