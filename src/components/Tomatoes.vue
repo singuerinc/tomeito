@@ -24,7 +24,6 @@
     },
     beforeCreate () {
       this.$store.dispatch('loadPreferences')
-      this.$store.dispatch('initTimer')
     },
     created () {
       this.init = new Audio()
@@ -61,6 +60,8 @@
         this.tick.pause()
         this.onTimerComplete(timer, true)
       })
+
+      this.$store.dispatch('initTimer')
     },
     beforeDestroy () {
 

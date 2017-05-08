@@ -18,21 +18,6 @@
         </div>
         <span>Tick sound</span>
       </li>
-      <li class="with-tooltip" @click.stop="setAlwaysOnTop(!alwaysOnTop)">
-        <div class="btn btn-always-on-top-on" v-show="alwaysOnTop === true">
-          <svg fill="#FFFFFF" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 0h24v24H0z" fill="none"/>
-            <path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>
-          </svg>
-        </div>
-        <div class="btn btn-always-on-top-off" v-show="alwaysOnTop === false">
-          <svg fill="#FFFFFF" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0 0h24v24H0z" fill="none"/>
-            <path d="M19.81 14.99l1.19-.92-1.43-1.43-1.19.92 1.43 1.43zm-.45-4.72L21 9l-9-7-2.91 2.27 7.87 7.88 2.4-1.88zM3.27 1L2 2.27l4.22 4.22L3 9l1.63 1.27L12 16l2.1-1.63 1.43 1.43L12 18.54l-7.37-5.73L3 14.07l9 7 4.95-3.85L20.73 21 22 19.73 3.27 1z"/>
-          </svg>
-        </div>
-        <span>On top</span>
-      </li>
       <li class="with-tooltip" @click.stop="setAutoPlay(!autoPlay)">
         <div class="btn btn-auto-play-on" v-show="autoPlay === true">
           <svg fill="#FFFFFF" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
@@ -47,6 +32,21 @@
           </svg>
         </div>
         <span>Auto play</span>
+      </li>
+      <li class="with-tooltip" @click.stop="setAlwaysOnTop(!alwaysOnTop)">
+        <div class="btn btn-always-on-top-on" v-show="alwaysOnTop === true">
+          <svg fill="#FFFFFF" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M11.99 18.54l-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27-7.38 5.74zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27L12 16z"/>
+          </svg>
+        </div>
+        <div class="btn btn-always-on-top-off" v-show="alwaysOnTop === false">
+          <svg fill="#FFFFFF" height="16" viewBox="0 0 24 24" width="16" xmlns="http://www.w3.org/2000/svg">
+            <path d="M0 0h24v24H0z" fill="none"/>
+            <path d="M19.81 14.99l1.19-.92-1.43-1.43-1.19.92 1.43 1.43zm-.45-4.72L21 9l-9-7-2.91 2.27 7.87 7.88 2.4-1.88zM3.27 1L2 2.27l4.22 4.22L3 9l1.63 1.27L12 16l2.1-1.63 1.43 1.43L12 18.54l-7.37-5.73L3 14.07l9 7 4.95-3.85L20.73 21 22 19.73 3.27 1z"/>
+          </svg>
+        </div>
+        <span>On top</span>
       </li>
       <li>
         <div class="btn btn-settings" @click.stop="closeSettings()">
@@ -92,31 +92,31 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background: grey;
+    background: #242424;
     position: absolute;
     z-index: 99;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    display: flex;
   }
 
   ul li {
     margin: 0;
     padding: 0;
-    display: inline-block;
     overflow: hidden;
     position: relative;
     cursor: pointer;
+    background-color: rgba(0, 0, 0, 0);
+    transition-duration: 500ms;
+    transition-property: opacity, background-color;
   }
 
   .btn {
     padding: 7px;
-    width: 30px;
+    width: 90px;
     height: 30px;
-    background-color: rgba(255, 255, 255, 0);
-    transition-property: opacity, width, background-color;
-    transition-duration: 500ms;
   }
 
   .btn svg {
@@ -126,21 +126,22 @@
     padding: 0;
   }
 
-  .btn:hover {
-    background-color: rgba(255, 255, 255, 0.1);
+  .btn.btn-settings {
+    width: 30px;
   }
 
-  ul li.with-tooltip:hover .btn {
-    width: 100px;
+  ul li:hover {
+    background-color: rgba(255, 0, 0, 0.4);
   }
 
   ul li.with-tooltip span {
+    user-select: none;
     position: absolute;
     top: 0;
     left: 30px;
     color: white;
     height: 30px;
-    width: 110px;
+    width: 60px;
     font-size: 8px;
     line-height: 31px;
     text-transform: uppercase;
