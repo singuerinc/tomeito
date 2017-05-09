@@ -14,7 +14,7 @@ const store = new Vuex.Store({
     volume: false,
     alwaysOnTop: false,
     timers: [
-      // new Timer(bus, {type: Timer.TYPE_TOMATO, completed: true})
+      // new Timer(bus, {type: Timer.TYPE_TOMATO, completed: true}),
     ],
     timer: null,
     autoPlay: false

@@ -7,7 +7,7 @@ const url = require('url')
 let win
 let updateAvailable = false
 
-const updateFeed = 'https://secret-plains-95341.herokuapp.com/updates/latest'
+const updateFeed = 'http://tomeito.singuerinc.com/updates/latest'
 
 autoUpdater.setFeedURL(updateFeed + '?v=' + appVersion)
 autoUpdater.checkForUpdates() // check day
@@ -32,6 +32,7 @@ ipcMain.on('update-app', (event, arg) => {
 function createWindow () {
   // Create the browser window.
   win = new BrowserWindow({
+    resizable: false,
     transparent: true,
     center: true,
     width: 300,
@@ -51,8 +52,8 @@ function createWindow () {
     slashes: true
   }))
 
-  win.setPosition(win.getPosition()[0], 40, false)
-
+  // win.setPosition(win.getPosition()[0], 40, false)
+  win.center()
   // Open the DevTools.
 //  win.webContents.openDevTools()
 

@@ -41,7 +41,7 @@
             router.push('/tomatoes')
           }, 1000)
         }
-      }, 25)
+      }, 15)
     }
   }
 </script>
