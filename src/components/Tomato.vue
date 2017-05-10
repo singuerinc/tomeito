@@ -85,26 +85,54 @@
       checkAppUpdate () {
         this.updateAvailable = ipcRenderer.sendSync('has-app-update')
         if (this.updateAvailable) {
+          this.$store.commit('GA_event', {
+            evCategory: 'update',
+            evAction: 'available'
+          })
           clearInterval(this.updateInterval)
         }
       },
       playPause: function () {
         if (this.$store.state.timer.isRunning()) {
+          this.$store.commit('GA_event', {
+            evCategory: 'btn',
+            evAction: 'pause'
+          })
           this.$store.state.timer.pause()
         } else {
+          this.$store.commit('GA_event', {
+            evCategory: 'btn',
+            evAction: 'play'
+          })
           this.$store.state.timer.play()
         }
       },
       reset () {
+        this.$store.commit('GA_event', {
+          evCategory: 'btn',
+          evAction: 'reset'
+        })
         this.$store.state.timer.reset(true)
       },
       skip () {
+        this.$store.commit('GA_event', {
+          evCategory: 'btn',
+          evAction: 'skip'
+        })
         this.$store.state.timer.skip()
       },
       openSettings () {
+        this.$store.commit('GA_event', {
+          evCategory: 'settings',
+          evAction: 'open'
+        })
         this.showSettings = true
       },
       updateApp () {
+        this.$store.commit('GA_event', {
+          evCategory: 'update',
+          evAction: 'update-app'
+        })
         ipcRenderer.send('update-app')
       }
     },

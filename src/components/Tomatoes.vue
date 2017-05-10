@@ -26,6 +26,8 @@
       this.$store.dispatch('loadPreferences')
     },
     created () {
+      this.$store.commit('GA_screen', 'tomatoes')
+
       this.init = new Audio()
       this.init.src = 'static/init.mp3'
 
@@ -38,25 +40,45 @@
       this.tick.loop = true
 
       this.$store.state.bus.$on('completed', (timer) => {
+        this.$store.commit('GA_event', {
+          evCategory: 'timer',
+          evAction: 'completed'
+        })
         this.tick.pause()
         this.onTimerComplete(timer, false)
       })
 
       this.$store.state.bus.$on('init', () => {
         if (this.$store.state.autoPlay === false) {
+          this.$store.commit('GA_event', {
+            evCategory: 'timer',
+            evAction: 'init'
+          })
           this.init.play()
         }
       })
 
       this.$store.state.bus.$on('started', () => {
+        this.$store.commit('GA_event', {
+          evCategory: 'timer',
+          evAction: 'started'
+        })
         this.tick.play()
       })
 
       this.$store.state.bus.$on('paused', () => {
+        this.$store.commit('GA_event', {
+          evCategory: 'timer',
+          evAction: 'paused'
+        })
         this.tick.pause()
       })
 
       this.$store.state.bus.$on('skipped', (timer) => {
+        this.$store.commit('GA_event', {
+          evCategory: 'timer',
+          evAction: 'skipped'
+        })
         this.tick.pause()
         this.onTimerComplete(timer, true)
       })
