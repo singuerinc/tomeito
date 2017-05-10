@@ -3,14 +3,18 @@ import Vuex from 'vuex'
 import Timer from './timer'
 import * as preferences from 'store'
 import { ipcRenderer } from 'electron'
+import Analytics from 'electron-google-analytics'
+import { version } from '../package.json'
 
 Vue.use(Vuex)
 
 const bus = new Vue()
+const analytics = new Analytics('UA-881783-17')
 
 const store = new Vuex.Store({
   state: {
     bus,
+    analytics,
     volume: false,
     alwaysOnTop: false,
     timers: [
@@ -41,6 +45,15 @@ const store = new Vuex.Store({
       state.alwaysOnTop = value
       ipcRenderer.send('always-on-top', state.alwaysOnTop)
       preferences.set('alwaysOnTop', value)
+    },
+    GA_screen (state, value) {
+      state.analytics.event(`screen`, `${value}`, {
+        evLabel: `${version}`
+      })
+    },
+    GA_event (state, {evCategory, evAction, opt}) {
+      opt = opt || {}
+      state.analytics.event(evCategory, evAction, opt)
     }
   },
   getters: {

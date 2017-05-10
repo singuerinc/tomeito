@@ -1,6 +1,6 @@
 {
   "name": "Tomeito",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Tomeito",
   "author": "singuerinc <nahuel.scotti@gmail.com>",
   "main": "main.js",
@@ -19,7 +19,11 @@
   "dependencies": {
     "date-fns": "^1.28.4",
     "electron": "^1.6.6",
+    "electron-google-analytics": "^0.0.16",
+    "fs": "^0.0.1-security",
+    "net": "^1.0.2",
     "store": "^2.0.4",
+    "tls": "^0.0.1",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
     "vuex": "^2.3.1"

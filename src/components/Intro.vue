@@ -4,10 +4,12 @@
 
 <script>
   import router from '../router'
+  import store from '../store'
 
   export default {
     name: 'intro',
     router,
+    store,
     data () {
       return {
         appName: 'TOMEITO',
@@ -42,6 +44,8 @@
           }, 1000)
         }
       }, 15)
+
+      this.$store.commit('GA_screen', 'intro')
     }
   }
 </script>

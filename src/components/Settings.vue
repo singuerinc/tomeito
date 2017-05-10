@@ -61,7 +61,7 @@
 </template>
 <script>
   import router from '../router'
-  import { mapState, mapMutations } from 'vuex'
+  import { mapState } from 'vuex'
   import store from '../store'
 
   export default {
@@ -69,12 +69,41 @@
     router,
     store,
     methods: {
-      ...mapMutations([
-        'setVolume',
-        'setAlwaysOnTop',
-        'setAutoPlay'
-      ]),
+      setVolume (value) {
+        this.$store.commit('GA_event', {
+          evCategory: 'settings',
+          evAction: 'setVolume',
+          opt: {
+            evLabel: `volume--${value}`
+          }
+        })
+        this.$store.commit('setVolume', value)
+      },
+      setAlwaysOnTop (value) {
+        this.$store.commit('GA_event', {
+          evCategory: 'settings',
+          evAction: 'setAlwaysOnTop',
+          opt: {
+            evLabel: `always-on-top--${value}`
+          }
+        })
+        this.$store.commit('setAlwaysOnTop', value)
+      },
+      setAutoPlay (value) {
+        this.$store.commit('GA_event', {
+          evCategory: 'settings',
+          evAction: 'setAutoPlay',
+          opt: {
+            evLabel: `auto-play--${value}`
+          }
+        })
+        this.$store.commit('setAutoPlay', value)
+      },
       closeSettings () {
+        this.$store.commit('GA_event', {
+          evCategory: 'settings',
+          evAction: 'close'
+        })
         this.$emit('close')
       }
     },
