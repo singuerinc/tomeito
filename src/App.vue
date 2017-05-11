@@ -23,7 +23,7 @@ export default {
 }
 
 html, body {
-  height: 30px;
+  height: 34px;
   overflow: hidden;
   margin: 0;
   padding: 0;

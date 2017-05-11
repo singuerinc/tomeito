@@ -64,8 +64,8 @@
 
   div h1 {
     position: absolute;
-    font-size: 16px;
-    top: 5px;
+    font-size: 17px;
+    top: 4px;
     left: 8px;
     color: #999;
     margin: 0;
