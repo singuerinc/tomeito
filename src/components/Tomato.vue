@@ -8,7 +8,6 @@
       <div class="inner" :style="{'width': width}"></div>
     </div>
     <div class="time">{{time}}</div>
-
     <div class="btn btn-update" v-show="updateAvailable" @click.stop="updateApp()">
       <svg fill="#FFFFFF" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg">
         <path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/>
@@ -198,6 +197,7 @@
   }
 
   .progress {
+    pointer-events: none;
     display: block;
     position: absolute;
     top: 0;
@@ -221,6 +221,7 @@
   }
 
   .tomatoes {
+    pointer-events: none;
     position: relative;
     top: 0;
     left: 58px;
@@ -228,6 +229,7 @@
     padding: 0;
     z-index: 1;
     list-style-type: none;
+    overflow: hidden;
   }
 
   .tomatoes li {
@@ -235,7 +237,7 @@
     display: block;
     width: 4px;
     height: 4px;
-    margin: 14px 2px;
+    margin: 13px 2px;
     border-radius: 100%;
     background: black;
     opacity: 0.2;
@@ -263,8 +265,10 @@
   }
 
   .time {
+    pointer-events: none;
+    font-size: 17px;
     position: absolute;
-    top: 5px;
+    top: 4px;
     left: 8px;
     color: var(--time-color);
   }
