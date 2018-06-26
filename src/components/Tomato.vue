@@ -286,7 +286,7 @@
     width: 30px;
     height: 30px;
     background-color: rgba(255, 255, 255, 0);
-    opacity: 0;
+    /* opacity: 0; */
     transition-property: opacity, background-color;
     transition-duration: 500ms;
   }
