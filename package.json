@@ -3,7 +3,7 @@
   "version": "0.5.0",
   "description": "Tomeito",
   "author": "singuerinc <nahuel.scotti@gmail.com>",
-  "main": "dist/main.js",
+  "main": "main.js",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
@@ -18,8 +18,10 @@
   "build": {
     "appId": "com.singuerinc.tomeito",
     "files": [
-      "dist/**/*",
-      "node_modules/**/*",
+      "dist/",
+      "node_modules/",
+      "index.html",
+      "main.js",
       "package.json"
     ],
     "directories": {
@@ -29,7 +31,7 @@
       {
         "provider": "github",
         "owner": "singuerinc",
-        "repo": "tomeitos"
+        "repo": "tomeito"
       }
     ],
     "productName": "Tomeito",
