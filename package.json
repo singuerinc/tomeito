@@ -2,7 +2,19 @@
   "name": "Tomeito",
   "version": "0.5.0",
   "description": "Tomeito",
-  "author": "singuerinc <nahuel.scotti@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/singuerinc/tomeito.git"
+  },
+  "author": {
+    "name": "Nahuel Scotti",
+    "email": "nahuel.scotti@gmail.com",
+    "url": "https://github.com/singuerinc"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/singuerinc/tomeito/issues"
+  },
   "main": "main.js",
   "private": true,
   "scripts": {
