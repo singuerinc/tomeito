@@ -1,32 +1,14 @@
-const appVersion = require('./package.json').version
-const {app, BrowserWindow, autoUpdater, ipcMain} = require('electron')
+const { app, BrowserWindow, autoUpdater, ipcMain } = require('electron')
 const path = require('path')
 const url = require('url')
+
+require('update-electron-app')()
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
-let updateAvailable = false
-
-const updateFeed = 'http://tomeito.singuerinc.com/updates/latest'
-
-autoUpdater.setFeedURL(updateFeed + '?v=' + appVersion)
-autoUpdater.checkForUpdates() // check day
-autoUpdater.on('update-downloaded', () => {
-  updateAvailable = true
-})
 
 ipcMain.on('always-on-top', (event, arg) => {
   win.setAlwaysOnTop(arg)
-})
-
-ipcMain.on('has-app-update', (event, arg) => {
-  event.returnValue = updateAvailable
-})
-
-ipcMain.on('update-app', (event, arg) => {
-  if (updateAvailable) {
-    autoUpdater.quitAndInstall()
-  }
 })
 
 function createWindow () {
@@ -46,16 +28,18 @@ function createWindow () {
   })
 
   // and load the index.html of the app.
-  win.loadURL(url.format({
-    pathname: path.join(__dirname, 'index.html'),
-    protocol: 'file:',
-    slashes: true
-  }))
+  win.loadURL(
+    url.format({
+      pathname: path.join(__dirname, 'index.html'),
+      protocol: 'file:',
+      slashes: true
+    })
+  )
 
   // win.setPosition(win.getPosition()[0], 40, false)
   win.center()
   // Open the DevTools.
-//  win.webContents.openDevTools()
+  //  win.webContents.openDevTools()
 
   // Emitted when the window is closed.
   win.on('closed', () => {

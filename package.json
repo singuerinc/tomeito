@@ -1,9 +1,9 @@
 {
   "name": "Tomeito",
-  "version": "0.4.1",
+  "version": "0.5.0",
   "description": "Tomeito",
   "author": "singuerinc <nahuel.scotti@gmail.com>",
-  "main": "main.js",
+  "main": "dist/main.js",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
@@ -13,17 +13,42 @@
     "test": "yarn run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
     "build:electron": "electron-packager ./dist --electron-version 1.6.8 --overwrite --out out --icon=assets/tomeito.icns",
-    "pack": "yarn run build && yarn run build:electron && yarn run sign",
-    "sign": "codesign --deep --force --verbose --sign 'singuerinc-ca' ./out/Tomeito-darwin-x64/Tomeito.app"
+    "release": "yarn run build && electron-builder"
+  },
+  "build": {
+    "appId": "com.singuerinc.tomeito",
+    "files": [
+      "dist/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "buildResources": "resources"
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "singuerinc",
+        "repo": "tomeitossss"
+      }
+    ],
+    "productName": "Tomeito",
+    "mac": {
+      "category": "Utilities",
+      "target": [
+        "zip",
+        "dmg"
+      ]
+    }
   },
   "dependencies": {
     "date-fns": "^1.28.4",
-    "electron": "^1.6.6",
     "electron-google-analytics": "^0.0.16",
     "fs": "^0.0.1-security",
     "net": "^1.0.2",
     "store": "^2.0.4",
     "tls": "^0.0.1",
+    "update-electron-app": "^1.3.0",
     "vue": "^2.2.6",
     "vue-router": "^2.3.1",
     "vuex": "^2.3.1"
@@ -44,7 +69,8 @@
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^4.0.0",
     "css-loader": "^0.28.0",
-    "electron-packager": "^8.7.0",
+    "electron": "^1.6.6",
+    "electron-builder": "^20.18.0",
     "eslint": "^3.19.0",
     "eslint-config-standard": "^6.2.1",
     "eslint-friendly-formatter": "^2.0.7",

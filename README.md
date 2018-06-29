@@ -2,8 +2,8 @@
 
 ## Release
 
-1. Keychain Access > Menu > Certificate Assistant > Create a Certificate Authority > Name: singuerinc
-2. Pack the app and sign
+1.  Keychain Access > Menu > Certificate Assistant > Create a Certificate Authority > Name: singuerinc
+2.  Pack the app and sign
 
 ```bash
 yarn run pack
