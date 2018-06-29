@@ -24,7 +24,7 @@
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test": "yarn run unit",
     "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "build:electron": "electron-packager ./dist --electron-version 1.6.8 --overwrite --out out --icon=assets/tomeito.icns",
+    "build:electron": "electron-packager ./dist --electron-version 2.0.3 --overwrite --out out --icon=assets/tomeito.icns",
     "release": "yarn run build && electron-builder"
   },
   "build": {
@@ -83,7 +83,7 @@
     "copy-webpack-plugin": "^4.0.1",
     "cross-env": "^4.0.0",
     "css-loader": "^0.28.0",
-    "electron": "^1.6.6",
+    "electron": "^2.0.3",
     "electron-builder": "^20.18.0",
     "eslint": "^3.19.0",
     "eslint-config-standard": "^6.2.1",
