@@ -60,120 +60,119 @@
   </div>
 </template>
 <script>
-  import router from '../router'
-  import { mapState } from 'vuex'
-  import store from '../store'
+import router from '../router'
+import { mapState } from 'vuex'
+import store from '../store'
 
-  export default {
-    name: 'settings',
-    router,
-    store,
-    methods: {
-      setVolume (value) {
-        this.$store.commit('GA_event', {
-          evCategory: 'settings',
-          evAction: 'setVolume',
-          opt: {
-            evLabel: `volume--${value}`
-          }
-        })
-        this.$store.commit('setVolume', value)
-      },
-      setAlwaysOnTop (value) {
-        this.$store.commit('GA_event', {
-          evCategory: 'settings',
-          evAction: 'setAlwaysOnTop',
-          opt: {
-            evLabel: `always-on-top--${value}`
-          }
-        })
-        this.$store.commit('setAlwaysOnTop', value)
-      },
-      setAutoPlay (value) {
-        this.$store.commit('GA_event', {
-          evCategory: 'settings',
-          evAction: 'setAutoPlay',
-          opt: {
-            evLabel: `auto-play--${value}`
-          }
-        })
-        this.$store.commit('setAutoPlay', value)
-      },
-      closeSettings () {
-        this.$store.commit('GA_event', {
-          evCategory: 'settings',
-          evAction: 'close'
-        })
-        this.$emit('close')
-      }
-    },
-    computed: {
-      ...mapState({
-        volume: state => state.volume,
-        alwaysOnTop: state => state.alwaysOnTop,
-        autoPlay: state => state.autoPlay
+export default {
+  name: 'settings',
+  router,
+  store,
+  methods: {
+    setVolume(value) {
+      this.$store.commit('GA_event', {
+        evCategory: 'settings',
+        evAction: 'setVolume',
+        opt: {
+          evLabel: `volume--${value}`
+        }
       })
+      this.$store.commit('setVolume', value)
+    },
+    setAlwaysOnTop(value) {
+      this.$store.commit('GA_event', {
+        evCategory: 'settings',
+        evAction: 'setAlwaysOnTop',
+        opt: {
+          evLabel: `always-on-top--${value}`
+        }
+      })
+      this.$store.commit('setAlwaysOnTop', value)
+    },
+    setAutoPlay(value) {
+      this.$store.commit('GA_event', {
+        evCategory: 'settings',
+        evAction: 'setAutoPlay',
+        opt: {
+          evLabel: `auto-play--${value}`
+        }
+      })
+      this.$store.commit('setAutoPlay', value)
+    },
+    closeSettings() {
+      this.$store.commit('GA_event', {
+        evCategory: 'settings',
+        evAction: 'close'
+      })
+      this.$emit('close')
     }
+  },
+  computed: {
+    ...mapState({
+      volume: (state) => state.volume,
+      alwaysOnTop: (state) => state.alwaysOnTop,
+      autoPlay: (state) => state.autoPlay
+    })
   }
+}
 </script>
 <style scoped>
-  ul {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background: #242424;
-    position: absolute;
-    z-index: 99;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-  }
-
-  ul li {
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    position: relative;
-    cursor: pointer;
-    background-color: rgba(0, 0, 0, 0);
-    transition-duration: 500ms;
-    transition-property: opacity, background-color;
-  }
-
-  .btn {
-    padding: 7px;
-    width: 90px;
-    height: 30px;
-  }
-
-  .btn svg {
-    pointer-events: none;
-    opacity: 0.8;
-    margin: 0;
-    padding: 0;
-  }
-
-  .btn.btn-settings {
-    width: 30px;
-  }
-
-  ul li:hover {
-    background-color: rgba(255, 0, 0, 0.4);
-  }
-
-  ul li.with-tooltip span {
-    user-select: none;
-    position: absolute;
-    top: 0;
-    left: 30px;
-    color: white;
-    height: 30px;
-    width: 60px;
-    font-size: 8px;
-    line-height: 31px;
-    text-transform: uppercase;
+ul {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #242424;
+  position: absolute;
+  z-index: 99;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
 }
 
+ul li {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  background-color: rgba(0, 0, 0, 0);
+  transition-duration: 300ms;
+  transition-property: opacity, background-color;
+}
+
+.btn {
+  padding: 7px;
+  width: 90px;
+  height: 30px;
+}
+
+.btn svg {
+  pointer-events: none;
+  opacity: 0.8;
+  margin: 0;
+  padding: 0;
+}
+
+.btn.btn-settings {
+  width: 30px;
+}
+
+ul li:hover {
+  background-color: rgba(255, 0, 0, 0.4);
+}
+
+ul li.with-tooltip span {
+  user-select: none;
+  position: absolute;
+  top: 0;
+  left: 30px;
+  color: white;
+  height: 30px;
+  width: 60px;
+  font-size: 9px;
+  line-height: 31px;
+  text-transform: uppercase;
+}
 </style>

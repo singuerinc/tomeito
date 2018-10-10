@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Tomatoes from '@/components/Tomatoes'
-import Intro from '@/components/Intro'
+import Tomatoes from '../components/Tomatoes'
+import Intro from '../components/Intro'
 
 Vue.use(Router)
 
-const router = new Router({
+export default new Router({
   routes: [
     {
       path: '/',
@@ -16,10 +16,10 @@ const router = new Router({
       path: '/tomatoes',
       name: 'tomatoes',
       component: Tomatoes
+    },
+    {
+      path: '*',
+      redirect: '/'
     }
   ]
 })
-
-router.replace('/')
-
-export default router

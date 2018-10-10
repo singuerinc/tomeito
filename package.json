@@ -1,133 +1,106 @@
 {
-  "name": "Tomeito",
-  "version": "0.5.0",
-  "description": "Tomeito",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/singuerinc/tomeito.git"
-  },
-  "author": {
-    "name": "Nahuel Scotti",
-    "email": "nahuel.scotti@gmail.com",
-    "url": "https://github.com/singuerinc"
-  },
+  "name": "tomeito",
+  "version": "1.0.0",
+  "author": "singuerinc <nahuel.scotti@gmail.com>",
+  "description": "Simple, elegant, tasty.",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/singuerinc/tomeito/issues"
-  },
-  "main": "main.js",
-  "private": true,
+  "main": "./dist/electron/main.js",
   "scripts": {
-    "dev": "node build/dev-server.js",
-    "start": "node build/dev-server.js",
-    "build": "node build/build.js",
-    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
-    "test": "yarn run unit",
-    "lint": "eslint --ext .js,.vue src test/unit/specs",
-    "build:electron": "electron-packager ./dist --electron-version 2.0.3 --overwrite --out out --icon=assets/tomeito.icns",
-    "release": "yarn run build && electron-builder"
+    "build": "node .electron-vue/build.js && electron-builder",
+    "build:dir": "node .electron-vue/build.js && electron-builder --dir",
+    "build:clean": "cross-env BUILD_TARGET=clean node .electron-vue/build.js",
+    "build:web": "cross-env BUILD_TARGET=web node .electron-vue/build.js",
+    "dev": "node .electron-vue/dev-runner.js",
+    "lint": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter src",
+    "lint:fix": "eslint --ext .js,.vue -f ./node_modules/eslint-friendly-formatter --fix src",
+    "pack": "npm run pack:main && npm run pack:renderer",
+    "pack:main": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.main.config.js",
+    "pack:renderer": "cross-env NODE_ENV=production webpack --progress --colors --config .electron-vue/webpack.renderer.config.js",
+    "postinstall": "npm run lint:fix"
   },
   "build": {
-    "appId": "com.singuerinc.tomeito",
-    "files": [
-      "dist/",
-      "node_modules/",
-      "index.html",
-      "main.js",
-      "package.json"
-    ],
+    "productName": "tomeito",
+    "appId": "tomeito-app.singuerinc.com",
     "directories": {
-      "buildResources": "resources"
+      "output": "build"
     },
-    "publish": [
-      {
-        "provider": "github",
-        "owner": "singuerinc",
-        "repo": "tomeito"
-      }
+    "files": [
+      "dist/electron/**/*"
     ],
-    "productName": "Tomeito",
-    "mac": {
-      "category": "Utilities",
-      "target": [
-        "zip",
-        "dmg"
+    "dmg": {
+      "contents": [
+        {
+          "x": 410,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 150,
+          "type": "file"
+        }
       ]
+    },
+    "mac": {
+      "icon": "build/icons/icon.icns"
+    },
+    "win": {
+      "icon": "build/icons/icon.ico"
+    },
+    "linux": {
+      "icon": "build/icons"
     }
   },
   "dependencies": {
-    "date-fns": "^1.28.4",
-    "electron-google-analytics": "^0.0.16",
-    "fs": "^0.0.1-security",
-    "net": "^1.0.2",
-    "store": "^2.0.4",
-    "tls": "^0.0.1",
-    "update-electron-app": "^1.3.0",
-    "vue": "^2.2.6",
-    "vue-router": "^2.3.1",
-    "vuex": "^2.3.1"
+    "date-fns": "^1.29.0",
+    "electron-google-analytics": "^0.1.0",
+    "store": "^2.0.12",
+    "vue": "^2.5.16",
+    "vue-electron": "^1.0.6",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
-    "autoprefixer": "^6.7.2",
-    "babel-core": "^6.22.1",
-    "babel-eslint": "^7.1.1",
-    "babel-loader": "^6.2.10",
-    "babel-plugin-istanbul": "^4.1.1",
-    "babel-plugin-transform-runtime": "^6.22.0",
-    "babel-preset-env": "^1.3.2",
-    "babel-preset-stage-2": "^6.22.0",
-    "babel-register": "^6.22.0",
-    "chai": "^3.5.0",
-    "chalk": "^1.1.3",
-    "connect-history-api-fallback": "^1.3.0",
-    "copy-webpack-plugin": "^4.0.1",
-    "cross-env": "^4.0.0",
-    "css-loader": "^0.28.0",
-    "electron": "^2.0.3",
-    "electron-builder": "^20.18.0",
-    "eslint": "^3.19.0",
-    "eslint-config-standard": "^6.2.1",
-    "eslint-friendly-formatter": "^2.0.7",
-    "eslint-loader": "^1.7.1",
-    "eslint-plugin-html": "^2.0.0",
-    "eslint-plugin-promise": "^3.4.0",
-    "eslint-plugin-standard": "^2.0.1",
-    "eventsource-polyfill": "^0.9.6",
-    "express": "^4.14.1",
-    "extract-text-webpack-plugin": "^2.0.0",
-    "file-loader": "^0.11.1",
-    "friendly-errors-webpack-plugin": "^1.1.3",
-    "html-webpack-plugin": "^2.28.0",
-    "http-proxy-middleware": "^0.17.3",
-    "inject-loader": "^3.0.0",
-    "lolex": "^1.5.2",
-    "mocha": "^3.2.0",
-    "opn": "^4.0.2",
-    "optimize-css-assets-webpack-plugin": "^1.3.0",
-    "ora": "^1.2.0",
-    "phantomjs-prebuilt": "^2.1.14",
-    "rimraf": "^2.6.0",
-    "semver": "^5.3.0",
-    "shelljs": "^0.7.6",
-    "sinon": "^2.1.0",
-    "sinon-chai": "^2.8.0",
-    "url-loader": "^0.5.8",
-    "vue-loader": "^11.3.4",
-    "vue-style-loader": "^2.0.5",
-    "vue-template-compiler": "^2.2.6",
-    "webpack": "^2.3.3",
-    "webpack-bundle-analyzer": "^2.2.1",
-    "webpack-dev-middleware": "^1.10.0",
-    "webpack-hot-middleware": "^2.18.0",
-    "webpack-merge": "^4.1.0"
-  },
-  "engines": {
-    "node": ">= 4.0.0",
-    "npm": ">= 3.0.0"
-  },
-  "browserslist": [
-    "> 1%",
-    "last 2 versions",
-    "not ie <= 8"
-  ]
+    "ajv": "^6.5.0",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^8.2.3",
+    "babel-loader": "^7.1.4",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "babel-register": "^6.26.0",
+    "babili-webpack-plugin": "^0.1.2",
+    "cfonts": "^2.1.2",
+    "chalk": "^2.4.1",
+    "copy-webpack-plugin": "^4.5.1",
+    "cross-env": "^5.1.6",
+    "css-loader": "^0.28.11",
+    "del": "^3.0.0",
+    "devtron": "^1.4.0",
+    "electron": "^2.0.4",
+    "electron-builder": "^20.19.2",
+    "electron-debug": "^1.5.0",
+    "electron-devtools-installer": "^2.2.4",
+    "eslint": "^4.19.1",
+    "eslint-friendly-formatter": "^4.0.1",
+    "eslint-loader": "^2.0.0",
+    "eslint-plugin-html": "^4.0.3",
+    "file-loader": "^1.1.11",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "0.4.0",
+    "multispinner": "^0.2.1",
+    "node-loader": "^0.6.0",
+    "style-loader": "^0.21.0",
+    "url-loader": "^1.0.1",
+    "vue-html-loader": "^1.2.4",
+    "vue-loader": "^15.2.4",
+    "vue-style-loader": "^4.1.0",
+    "vue-template-compiler": "^2.5.16",
+    "webpack": "^4.15.1",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4",
+    "webpack-hot-middleware": "^2.22.2",
+    "webpack-merge": "^4.1.3"
+  }
 }

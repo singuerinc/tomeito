@@ -6,24 +6,25 @@
 
 <script>
 export default {
-  name: 'app'
+  name: 'tomeito'
 }
 </script>
 
 <style>
 #app {
-  font-family: 'Nunito', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
+    Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  top: 4px;
   position: absolute;
   height: 30px;
   left: 0;
   width: 100%;
 }
 
-html, body {
-  height: 34px;
+html,
+body {
+  height: 30px;
   overflow: hidden;
   margin: 0;
   padding: 0;
