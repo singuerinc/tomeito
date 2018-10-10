@@ -1,7 +1,10 @@
 import { app, BrowserWindow } from 'electron'
 
 if (process.env.NODE_ENV === 'production') {
-  require('update-electron-app')()
+  require('update-electron-app')({
+    repo: 'singuerinc/tomeito',
+    logger: require('electron-log')
+  })
 }
 
 /**

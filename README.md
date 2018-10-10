@@ -1,8 +1,22 @@
-# Tomeito
+# Tomeito - Pomodoro Timer
 
-> Simple, elegant, tasty.
+Simple, elegant, tasty.
 
-#### Build Setup
+## Modes
+
+### Idle
+
+![Idle](./art/idle.png)
+
+### Pomodoro 25 min
+
+![Pomodoro](./art/pomodoro.png)
+
+### Break 5 min
+
+![Break](./art/break.png)
+
+## Build Setup
 
 ```bash
 # install dependencies

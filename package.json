@@ -1,6 +1,6 @@
 {
   "name": "tomeito",
-  "version": "1.0.0",
+  "version": "0.5.0",
   "author": "singuerinc <nahuel.scotti@gmail.com>",
   "description": "Simple, elegant, tasty.",
   "license": "MIT",
@@ -20,7 +20,7 @@
   },
   "build": {
     "productName": "tomeito",
-    "appId": "tomeito-app.singuerinc.com",
+    "appId": "com.singuerinc.tomeito",
     "directories": {
       "output": "build"
     },
@@ -42,6 +42,13 @@
         }
       ]
     },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "singuerinc",
+        "repo": "tomeito"
+      }
+    ],
     "mac": {
       "icon": "build/icons/icon.icns"
     },
@@ -55,7 +62,9 @@
   "dependencies": {
     "date-fns": "^1.29.0",
     "electron-google-analytics": "^0.1.0",
+    "electron-log": "^2.2.17",
     "store": "^2.0.12",
+    "update-electron-app": "^1.3.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-router": "^3.0.1",
