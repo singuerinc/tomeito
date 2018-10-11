@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, ipcMain } from 'electron'
 
 if (process.env.NODE_ENV === 'production') {
   require('update-electron-app')({
@@ -38,7 +38,7 @@ function createWindow() {
     acceptFirstMouse: true,
     minimizable: true,
     maximizable: false,
-    hasShadow: false,
+    hasShadow: true,
     backgroundColor: '#00000000'
   })
 
@@ -61,4 +61,8 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+ipcMain.on('always-on-top', (event, arg) => {
+  mainWindow.setAlwaysOnTop(arg)
 })
