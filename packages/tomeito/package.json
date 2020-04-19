@@ -9,7 +9,8 @@
     "start": "electron ./dist",
     "build": "tsc",
     "pack": "electron-builder --dir --project ./dist",
-    "dist": "electron-builder --project ./dist"
+    "dist": "electron-builder --project ./dist",
+    "publish": "electron-builder --publish onTagOrDraft --project ./dist"
   },
   "devDependencies": {
     "@types/react": "^16.9.34",
