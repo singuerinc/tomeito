@@ -1,25 +1,32 @@
 import { useMachine } from "@xstate/react";
 import { icons } from "feather-icons";
 import React from "react";
+import { interval, Subscription } from "rxjs";
+import { map, take } from "rxjs/operators";
 import styled from "styled-components";
-import { Machine } from "xstate";
+import { assign, Machine, EventObject } from "xstate";
+import format from "date-fns/format";
 
 type Tomato = {
-  time: number;
-  complete: boolean;
+  dateCreated: Date;
+  completed: boolean;
 };
 
 type Context = {
-  current: Tomato;
+  current: number;
   list: Tomato[];
 };
 
 const context: Context = {
-  current: {
-    time: 0,
-    complete: false
-  },
+  current: 0,
   list: []
+};
+
+const startTimer = () => {
+  const timer = interval(1000);
+  return timer.subscribe(x => {
+    console.log(x, x);
+  });
 };
 
 const timerMachine = Machine({
@@ -32,7 +39,17 @@ const timerMachine = Machine({
       }
     },
     running: {
+      invoke: {
+        src: () =>
+          interval(1000).pipe(
+            map(value => ({ type: "COUNT", value })),
+            take(60 * 25)
+          ),
+        onDone: "idle"
+      },
       on: {
+        COUNT: { actions: [assign((_, event) => ({ current: event.value }))] },
+        CANCEL: "idle",
         STOP: "idle"
       }
     }
@@ -49,13 +66,12 @@ const View = styled.div`
 
 export function Timer() {
   const [state, send] = useMachine(timerMachine);
-  const play = () => {
-    send("PLAY", {});
-  };
+  const play = () => send("PLAY");
   const stop = () => send("STOP");
+  console.log(state.context.current, format(state.context.current, "mm:ss"));
   return (
     <View>
-      <div>08:15</div>
+      <div>{format(state.context.current, "mm:ss")}</div>
       <div>Task title</div>
       {state.matches("idle") && <i onClick={play} dangerouslySetInnerHTML={{ __html: icons["play-circle"].toSvg() }} />}
       {state.matches("running") && (
