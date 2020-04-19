@@ -14,6 +14,7 @@
     "publish": "electron-builder --publish onTagOrDraft --project ./dist"
   },
   "devDependencies": {
+    "@types/feather-icons": "^4.7.0",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
     "@types/styled-components": "^5.1.0",
@@ -24,6 +25,8 @@
   },
   "dependencies": {
     "@xstate/react": "^0.8.1",
+    "feather": "^0.0.6",
+    "feather-icons": "^4.28.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "styled-components": "^5.1.0",

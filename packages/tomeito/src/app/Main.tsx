@@ -1,7 +1,9 @@
-import React from "react";
 import { useMachine } from "@xstate/react";
-import { Machine, interpret } from "xstate";
-import styled, { createGlobalStyle } from "styled-components";
+import React from "react";
+import { createGlobalStyle } from "styled-components";
+import { Machine } from "xstate";
+import { Settings } from "./Settings";
+import { Timer } from "./Timer";
 
 const Global = createGlobalStyle`
   html, body {
@@ -10,36 +12,11 @@ const Global = createGlobalStyle`
   }
 `;
 
-const View = styled.div`
-  background-color: red;
-  width: 23em;
-  height: 3em;
-`;
-
 const stateMachine = Machine({
-  id: "state-machine",
   initial: "timer",
   context: {},
   states: {
-    timer: {
-      initial: "long",
-      states: {
-        long: {
-          initial: "idle",
-          states: {
-            idle: {},
-            running: {}
-          }
-        },
-        break: {
-          initial: "idle",
-          states: {
-            idle: {},
-            running: {}
-          }
-        }
-      }
-    },
+    timer: {},
     settings: {}
   }
 });
@@ -49,7 +26,8 @@ export function Main() {
   return (
     <>
       <Global />
-      <View>{JSON.stringify(state.value)}</View>
+      <Timer />
+      <Settings />
     </>
   );
 }
