@@ -6,6 +6,7 @@
   "scripts": {
     "postinstall": "electron-builder install-app-deps",
     "init": "tsc --init",
+    "dev": "parcel ./src/index.html",
     "start": "electron ./dist",
     "build": "tsc",
     "pack": "electron-builder --dir --project ./dist",
@@ -15,13 +16,17 @@
   "devDependencies": {
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.6",
+    "@types/styled-components": "^5.1.0",
     "electron": "8.2.3",
     "electron-builder": "^22.5.1",
+    "parcel": "^1.12.4",
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "@xstate/react": "^0.8.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "styled-components": "^5.1.0",
     "xstate": "^4.9.1"
   }
 }
