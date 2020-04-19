@@ -1,6 +1,50 @@
 {
   "name": "tomeito",
   "version": "1.0.0",
-  "main": "main.js",
-  "license": "MIT"
+  "main": "index.js",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "8.2.3"
+  },
+  "build": {
+    "productName": "tomeito",
+    "appId": "com.singuerinc.tomeito",
+    "directories": {
+      "output": "../build"
+    },
+    "files": [
+      "**/*"
+    ],
+    "dmg": {
+      "contents": [
+        {
+          "x": 410,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 150,
+          "type": "file"
+        }
+      ]
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "singuerinc",
+        "repo": "tomeito"
+      }
+    ],
+    "mac": {
+      "icon": "build/icons/icon.icns"
+    },
+    "win": {
+      "icon": "build/icons/icon.ico"
+    },
+    "linux": {
+      "icon": "build/icons"
+    }
+  }
 }

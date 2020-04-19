@@ -1,8 +1,9 @@
 .DS_Store
-dist/electron/*
-dist/web/*
-build/*
-!build/icons
+packages/tomeito/dist/*
+!packages/tomeito/dist/index.html
+!packages/tomeito/dist/package.json
+packages/tomeito/build/**
+!packages/tomeito/build/icons
 node_modules/
 npm-debug.log
 npm-debug.log.*
