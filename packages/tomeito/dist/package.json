@@ -10,7 +10,7 @@
     "productName": "tomeito",
     "appId": "com.singuerinc.tomeito",
     "directories": {
-      "output": "../build"
+      "output": "build"
     },
     "files": [
       "**/*"
