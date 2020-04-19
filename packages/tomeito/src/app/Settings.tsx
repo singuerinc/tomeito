@@ -5,7 +5,6 @@ import { icons } from "feather-icons";
 const View = styled.div`
   background-color: #444;
   width: 23em;
-  height: 3em;
   svg {
     color: white;
   }

@@ -4,21 +4,36 @@ import React from "react";
 import styled from "styled-components";
 import { Machine } from "xstate";
 
+type Tomato = {
+  time: number;
+  complete: boolean;
+};
+
+type Context = {
+  current: Tomato;
+  list: Tomato[];
+};
+
+const context: Context = {
+  current: {
+    time: 0,
+    complete: false
+  },
+  list: []
+};
+
 const timerMachine = Machine({
-  initial: "tomato",
+  initial: "idle",
+  context,
   states: {
-    tomato: {
-      initial: "idle",
-      states: {
-        idle: {},
-        running: {}
+    idle: {
+      on: {
+        PLAY: "running"
       }
     },
-    break: {
-      initial: "idle",
-      states: {
-        idle: {},
-        running: {}
+    running: {
+      on: {
+        STOP: "idle"
       }
     }
   }
@@ -27,7 +42,6 @@ const timerMachine = Machine({
 const View = styled.div`
   background-color: #666;
   width: 23em;
-  height: 3em;
   svg {
     color: white;
   }
@@ -35,13 +49,18 @@ const View = styled.div`
 
 export function Timer() {
   const [state, send] = useMachine(timerMachine);
+  const play = () => {
+    send("PLAY", {});
+  };
+  const stop = () => send("STOP");
   return (
     <View>
       <div>08:15</div>
       <div>Task title</div>
-      <i dangerouslySetInnerHTML={{ __html: icons["play-circle"].toSvg() }} />
-      <i dangerouslySetInnerHTML={{ __html: icons["pause-circle"].toSvg() }} />
-      <i dangerouslySetInnerHTML={{ __html: icons["stop-circle"].toSvg() }} />
+      {state.matches("idle") && <i onClick={play} dangerouslySetInnerHTML={{ __html: icons["play-circle"].toSvg() }} />}
+      {state.matches("running") && (
+        <i onClick={stop} dangerouslySetInnerHTML={{ __html: icons["stop-circle"].toSvg() }} />
+      )}
     </View>
   );
 }
