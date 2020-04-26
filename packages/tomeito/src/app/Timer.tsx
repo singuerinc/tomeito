@@ -13,24 +13,41 @@ type Tomato = {
   completed: boolean;
 };
 
-type Context = {
-  current: number;
-  list: Tomato[];
-};
-
-const context: Context = {
+const context: TimerContext = {
   current: 0,
   list: []
 };
 
-const startTimer = () => {
-  const timer = interval(1000);
-  return timer.subscribe(x => {
-    console.log(x, x);
-  });
-};
+const mapStateToColor = (state: "idle" | "running"): string => (state === "idle" ? "green" : "red");
 
-const timerMachine = Machine({
+export function Timer() {
+  const [state, send] = useMachine(timerMachine);
+  const play = () => send("PLAY");
+  const stop = () => send("STOP");
+  const time = format(new Date(2000, 0, 1, 0, 0, state.context.current), "mm:ss");
+
+  const idle = state.matches("tomato.idle") || state.matches("break.idle");
+  const running = state.matches("tomato.running") || state.matches("break.running");
+
+  const color = mapStateToColor(idle ? "idle" : "running");
+
+  return (
+    <View color={color}>
+      <div>
+        <div>{time}</div>
+      </div>
+      <div>
+        <div>Task title</div>
+      </div>
+      <div>
+        {idle && <PlayButtonR onClick={play} />}
+        {running && <PlayStopR onClick={stop} />}
+      </div>
+    </View>
+  );
+}
+
+const timerMachine = Machine<TimerContext, TimerStateSchema, TimerEvent>({
   id: "timer",
   initial: "tomato",
   context,
@@ -88,36 +105,39 @@ const timerMachine = Machine({
   }
 });
 
-export function Timer() {
-  const [state, send] = useMachine(timerMachine);
-  const play = () => send("PLAY");
-  const stop = () => send("STOP");
-
-  console.log(state.value);
-  console.log(state.context.current, format(state.context.current, "mm:ss"));
-
-  const idle = state.matches("tomato.idle") || state.matches("break.idle");
-  const running = state.matches("tomato.running") || state.matches("break.running");
-  return (
-    <View>
-      <div>
-        <div>{format(state.context.current, "mm:ss")}</div>
-      </div>
-      <div>
-        <div>Task title</div>
-      </div>
-      <div>
-        {idle && <PlayButtonR onClick={play} />}
-        {running && <PlayStopR onClick={stop} />}
-      </div>
-    </View>
-  );
+interface TimerStateSchema {
+  states: {
+    tomato: {
+      states: {
+        idle: {};
+        running: {};
+      };
+    };
+    break: {
+      states: {
+        idle: {};
+        running: {};
+      };
+    };
+  };
 }
 
-const View = styled.div`
+type TimerEvent =
+  | { type: "PLAY" }
+  | { type: "COUNT"; value: number }
+  | { type: "CANCEL" }
+  | { type: "STOP" };
+
+interface TimerContext {
+  current: number;
+  list: Tomato[];
+}
+
+const View = styled.div<{ color: string }>`
   display: flex;
-  background-color: #666;
+  background-color: ${props => props.color};
   width: 23em;
+  padding: 0.5em;
   svg {
     color: white;
   }
@@ -129,6 +149,6 @@ const View = styled.div`
     flex: 1 1 100%;
   }
   > div:nth-of-type(3) {
-    flex: 20%;
+    flex: 1 1;
   }
 `;
