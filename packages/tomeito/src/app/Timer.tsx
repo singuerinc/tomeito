@@ -18,7 +18,8 @@ const context: TimerContext = {
   list: []
 };
 
-const mapStateToColor = (state: "idle" | "running"): string => (state === "idle" ? "green" : "red");
+const mapStateToColor = (state: "idle" | "running"): string =>
+  ({ idle: "#ff0000", running: "#00ff00" }[state]);
 
 export function Timer() {
   const [state, send] = useMachine(timerMachine);

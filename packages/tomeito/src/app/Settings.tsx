@@ -5,14 +5,6 @@ import { PathBack } from "../icons/PathBack";
 import { Sun } from "../icons/Sun";
 import { Sync } from "../icons/Sync";
 
-const View = styled.div`
-  background-color: #444;
-  width: 23em;
-  svg {
-    color: white;
-  }
-`;
-
 export function Settings() {
   return (
     <View>
@@ -23,3 +15,15 @@ export function Settings() {
     </View>
   );
 }
+
+const View = styled.div`
+  display: flex;
+  align-items: center;
+  padding: 0.5em;
+  background-color: #fff;
+  width: 23em;
+  i {
+    margin: 0 0.2em;
+    color: white;
+  }
+`;

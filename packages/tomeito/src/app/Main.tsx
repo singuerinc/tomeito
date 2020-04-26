@@ -1,11 +1,11 @@
 import { useMachine } from "@xstate/react";
-import { icons } from "feather-icons";
+import styled from "styled-components";
 import React from "react";
 import { createGlobalStyle } from "styled-components";
 import { Machine } from "xstate";
+import { Bell } from "../icons/Bell";
 import { Settings } from "./Settings";
 import { Timer } from "./Timer";
-import { Bell } from "../icons/Bell";
 
 const GlobalStyle = createGlobalStyle`
   html, body {
@@ -39,10 +39,16 @@ export function Main() {
   return (
     <>
       <GlobalStyle />
-      {state.matches("timer") && <Timer />}
-      {state.matches("settings") && <Settings />}
-      {state.matches("timer") && <Bell onClick={goSettings} />}
-      {state.matches("settings") && <Bell onClick={goTimer} />}
+      <View>
+        {state.matches("timer") && <Timer />}
+        {state.matches("settings") && <Settings />}
+        {state.matches("timer") && <Bell onClick={goSettings} />}
+        {state.matches("settings") && <Bell onClick={goTimer} />}
+      </View>
     </>
   );
 }
+
+const View = styled.div`
+  display: flex;
+`;
