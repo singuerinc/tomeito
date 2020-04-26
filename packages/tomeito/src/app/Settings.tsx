@@ -1,6 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { icons } from "feather-icons";
+import { Bell } from "../icons/Bell";
+import { PathBack } from "../icons/PathBack";
+import { Sun } from "../icons/Sun";
+import { Sync } from "../icons/Sync";
 
 const View = styled.div`
   background-color: #444;
@@ -13,10 +16,10 @@ const View = styled.div`
 export function Settings() {
   return (
     <View>
-      <i dangerouslySetInnerHTML={{ __html: icons.sun.toSvg() }} />
-      <i dangerouslySetInnerHTML={{ __html: icons.bell.toSvg() }} />
-      <i dangerouslySetInnerHTML={{ __html: icons.layers.toSvg() }} />
-      <i dangerouslySetInnerHTML={{ __html: icons["refresh-cw"].toSvg() }} />
+      <Sun />
+      <Bell />
+      <PathBack />
+      <Sync />
     </View>
   );
 }

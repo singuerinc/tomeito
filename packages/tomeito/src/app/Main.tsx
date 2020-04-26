@@ -5,6 +5,7 @@ import { createGlobalStyle } from "styled-components";
 import { Machine } from "xstate";
 import { Settings } from "./Settings";
 import { Timer } from "./Timer";
+import { Bell } from "../icons/Bell";
 
 const GlobalStyle = createGlobalStyle`
   html, body {
@@ -39,10 +40,8 @@ export function Main() {
       <GlobalStyle />
       {state.matches("timer") && <Timer />}
       {state.matches("settings") && <Settings />}
-      {state.matches("timer") && (
-        <i onClick={goSettings} dangerouslySetInnerHTML={{ __html: icons["settings"].toSvg() }} />
-      )}
-      {state.matches("settings") && <i onClick={goTimer} dangerouslySetInnerHTML={{ __html: icons["x"].toSvg() }} />}
+      {state.matches("timer") && <Bell onClick={goSettings} />}
+      {state.matches("settings") && <Bell onClick={goTimer} />}
     </>
   );
 }
