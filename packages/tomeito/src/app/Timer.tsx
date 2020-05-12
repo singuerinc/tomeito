@@ -7,6 +7,9 @@ import styled from "styled-components";
 import { assign, Machine } from "xstate";
 import { PlayButtonR } from "../icons/PlayButtonR";
 import { PlayStopR } from "../icons/PlayStopR";
+import initSound from "../sound/init.mp3";
+import tickSound from "../sound/tick.mp3";
+import completeSound from "../sound/tone.mp3";
 
 const TIMER_TIME = 60 * 25;
 const BREAK_TIME = 60 * 5;
@@ -16,7 +19,13 @@ type Tomato = {
   completed: boolean;
 };
 
+const tick = new Audio();
+tick.src = tickSound;
+tick.loop = true;
+tick.volume = 0.1;
+
 const context: TimerContext = {
+  tickSound: tick,
   current: TIMER_TIME,
   list: []
 };
@@ -64,69 +73,109 @@ export function Timer() {
   );
 }
 
-const timerMachine = Machine<TimerContext, TimerStateSchema, TimerEvent>({
-  id: "timer",
-  initial: "tomato",
-  context,
-  states: {
-    tomato: {
-      initial: "idle",
-      states: {
-        idle: {
-          entry: [assign(_ => ({ current: TIMER_TIME }))],
-          on: {
-            PLAY: "running"
-          }
-        },
-        running: {
-          invoke: {
-            src: () =>
-              interval(1000).pipe(
-                map(() => ({ type: "COUNT" })),
-                take(TIMER_TIME)
-              ),
-            onDone: "#timer.break"
+const timerMachine = Machine<TimerContext, TimerStateSchema, TimerEvent>(
+  {
+    id: "timer",
+    strict: true,
+    initial: "tomato",
+    context,
+    states: {
+      tomato: {
+        initial: "idle",
+        states: {
+          idle: {
+            entry: [assign(_ => ({ current: TIMER_TIME }))],
+            on: {
+              PLAY: "running"
+            }
           },
-          on: {
-            COUNT: { actions: [assign(ctx => ({ current: ctx.current - 1 }))] },
-            CANCEL: "#timer.break",
-            STOP: {
-              target: "#timer.break"
+          running: {
+            entry: ["playInitSound", "playTickSound"],
+            invoke: {
+              src: () =>
+                interval(1000).pipe(
+                  map(() => ({ type: "COUNT" })),
+                  take(TIMER_TIME)
+                ),
+              onDone: {
+                actions: ["stopTickSound", "playCompleteSound"],
+                target: "#timer.break"
+              }
+            },
+            on: {
+              COUNT: { actions: [assign(ctx => ({ current: ctx.current - 1 }))] },
+              CANCEL: {
+                actions: ["stopTickSound"],
+                target: "#timer.break"
+              },
+              STOP: {
+                actions: ["stopTickSound"],
+                target: "#timer.break"
+              }
             }
           }
         }
-      }
-    },
-    break: {
-      initial: "idle",
-      states: {
-        idle: {
-          entry: [assign(_ => ({ current: BREAK_TIME }))],
-          on: {
-            PLAY: "running"
-          }
-        },
-        running: {
-          invoke: {
-            src: () =>
-              interval(1000).pipe(
-                map(() => ({ type: "COUNT" })),
-                take(BREAK_TIME)
-              ),
-            onDone: "#timer.tomato"
+      },
+      break: {
+        initial: "idle",
+        states: {
+          idle: {
+            entry: [assign(_ => ({ current: BREAK_TIME }))],
+            on: {
+              PLAY: "running"
+            }
           },
-          on: {
-            COUNT: { actions: [assign(ctx => ({ current: ctx.current - 1 }))] },
-            CANCEL: "#timer.tomato",
-            STOP: {
-              target: "#timer.tomato"
+          running: {
+            entry: ["playInitSound", "playTickSound"],
+            invoke: {
+              src: () =>
+                interval(1000).pipe(
+                  map(() => ({ type: "COUNT" })),
+                  take(BREAK_TIME)
+                ),
+              onDone: {
+                actions: ["stopTickSound", "playCompleteSound"],
+                target: "#timer.tomato"
+              }
+            },
+            on: {
+              COUNT: { actions: [assign(ctx => ({ current: ctx.current - 1 }))] },
+              CANCEL: {
+                actions: ["stopTickSound"],
+                target: "#timer.tomato"
+              },
+              STOP: {
+                actions: ["stopTickSound"],
+                target: "#timer.tomato"
+              }
             }
           }
         }
       }
     }
+  },
+  {
+    actions: {
+      playInitSound: () => {
+        const a = new Audio();
+        a.src = initSound;
+        a.play();
+      },
+      playTickSound: ctx => {
+        ctx.tickSound.play();
+      },
+      stopTickSound: ctx => {
+        ctx.tickSound.pause();
+        ctx.tickSound.currentTime = 0;
+      },
+      playCompleteSound: () => {
+        const a = new Audio();
+        a.src = completeSound;
+        a.play();
+      }
+    }
   }
-});
+);
 
 interface TimerStateSchema {
   states: {
@@ -154,6 +203,7 @@ type TimerEvent =
 interface TimerContext {
   current: number;
   list: Tomato[];
+  tickSound: HTMLAudioElement;
 }
 
 const View = styled.div<{ color: string }>`
