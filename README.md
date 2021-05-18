@@ -4,6 +4,8 @@
 
 Simple, elegant, tasty.
 
+[Download](https://github.com/singuerinc/tomeito/releases)
+
 ## Modes
 
 ### Idle
