@@ -1,11 +1,13 @@
-import { useMachine, useSelector } from "@xstate/react";
-import { assign, createMachine } from "xstate";
 import {
-  IconPlayerSkipForward,
-  IconPlayerPlay,
   IconPlayerPause,
+  IconPlayerPlay,
+  IconPlayerSkipForward,
 } from "@tabler/icons-react";
+import { useMachine, useSelector } from "@xstate/react";
+import format from "date-fns/format";
 import { useCallback } from "react";
+import { assign, createMachine } from "xstate";
+import { useTimer } from "./useTimer";
 
 const machine = createMachine(
   {
@@ -15,26 +17,34 @@ const machine = createMachine(
     },
     states: {
       idle: {
+        entry: ["add25"],
         on: {
-          PLAY: [{ target: "running" }],
+          PLAY: [
+            {
+              target: "running",
+              cond: "isResting",
+              actions: ["stop", "add5", "start"],
+            },
+            { target: "running", actions: ["stop", "add25", "start"] },
+          ],
         },
       },
       running: {
         on: {
-          PAUSE: [{ target: "paused" }],
+          PAUSE: [{ target: "paused", actions: ["pause"] }],
           SKIP: [
-            { target: "idle", cond: "isResting", actions: ["setAsTomato"] },
-            { actions: ["setAsResting"] },
+            {
+              target: "idle",
+              cond: "isResting",
+              actions: ["stop", "setAsTomato"],
+            },
+            { actions: ["stop", "setAsResting", "add5", "start"] },
           ],
         },
       },
       paused: {
         on: {
-          PLAY: [{ target: "running" }],
-          SKIP: [
-            // { target: "idle", cond: "isResting", actions: ["setAsTomato"] },
-            { target: "idle", actions: ["setAsResting"] },
-          ],
+          PLAY: [{ target: "running", actions: ["start"] }],
         },
       },
     },
@@ -51,7 +61,10 @@ const machine = createMachine(
 );
 
 function App() {
-  const [state, send, service] = useMachine(machine);
+  const { add25, add5, accumulated, start, stop, pause } = useTimer();
+  const [state, send, service] = useMachine(machine, {
+    actions: { add25, add5, start, stop, pause },
+  });
   const isIdle = state.matches("idle");
   const isRunning = state.matches("running");
   const isPaused = state.matches("paused");
@@ -75,25 +88,34 @@ function App() {
 
   return (
     <div className="">
-      {isIdle && <IdleState handlePlay={handlePlay} />}
+      {isIdle && (
+        <IdleState accumulated={accumulated} handlePlay={handlePlay} />
+      )}
       {isRunning && (
         <RunningState
+          accumulated={accumulated}
           isResting={isResting}
           handlePause={handlePause}
           handleSkip={handleSkip}
         />
       )}
       {isPaused && (
-        <PausedState handlePlay={handlePlay} handleSkip={handleSkip} />
+        <PausedState accumulated={accumulated} handlePlay={handlePlay} />
       )}
     </div>
   );
 }
 
-function IdleState({ handlePlay }: { handlePlay: VoidFunction }) {
+function IdleState({
+  handlePlay,
+  accumulated,
+}: {
+  handlePlay: VoidFunction;
+  accumulated: Date;
+}) {
   return (
     <div className="grid grid-cols-10 h-12 items-center bg-[#57423F]">
-      <Timer />
+      <Timer accumulated={accumulated} />
       <div className="col-start-10">
         <PlayButton onClick={handlePlay} />
       </div>
@@ -105,10 +127,12 @@ function RunningState({
   isResting,
   handlePause,
   handleSkip,
+  accumulated,
 }: {
   isResting: boolean;
   handlePause: VoidFunction;
   handleSkip: VoidFunction;
+  accumulated: Date;
 }) {
   return (
     <div
@@ -116,10 +140,13 @@ function RunningState({
         isResting ? "bg-[#5C9C00]" : "bg-[#FF4545]"
       }`}
     >
-      {/* {isResting ? <span>resting</span> : <span>tomato</span>} */}
-      <Timer />
-      <div className="col-start-9 col-span-2 grid grid-cols-2">
-        <PauseButton onClick={handlePause} />
+      <Timer accumulated={accumulated} />
+      <div
+        className={`${
+          !isResting ? "col-start-9" : "col-start-10"
+        } col-span-2 grid grid-cols-2`}
+      >
+        {!isResting && <PauseButton onClick={handlePause} />}
         <SkipButton onClick={handleSkip} />
       </div>
     </div>
@@ -128,17 +155,16 @@ function RunningState({
 
 function PausedState({
   handlePlay,
-  handleSkip,
+  accumulated,
 }: {
   handlePlay: VoidFunction;
-  handleSkip: VoidFunction;
+  accumulated: Date;
 }) {
   return (
     <div className="grid grid-cols-10 h-12 items-center bg-[#BFA6A2]">
-      <Timer />
-      <div className="col-start-9 col-span-2 grid grid-cols-2">
+      <Timer accumulated={accumulated} />
+      <div className="col-start-10 col-span-2 grid grid-cols-2">
         <PlayButton onClick={handlePlay} />
-        <SkipButton onClick={handleSkip} />
       </div>
     </div>
   );
@@ -171,10 +197,10 @@ function SkipButton({ onClick }: { onClick: VoidFunction }) {
   );
 }
 
-function Timer() {
+function Timer({ accumulated }: { accumulated: Date }) {
   return (
     <div className="col-span-4 pl-3 tabular-nums text-2xl text-white mix-blend-overlay">
-      25:00
+      {format(accumulated, "mm:ss")}
     </div>
   );
 }
