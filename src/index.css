@@ -1,0 +1,14 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body {
+  @apply antialiased;
+  @apply w-full h-full;
+  @apply flex items-center justify-center;
+}
+
+#root {
+  @apply w-[480px] h-12 border;
+}
