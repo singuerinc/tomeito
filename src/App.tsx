@@ -8,6 +8,7 @@ import format from "date-fns/format";
 import { useCallback, useEffect, useMemo } from "react";
 import { assign, createMachine } from "xstate";
 import { useTimer } from "./useTimer";
+import { usePomodori } from "./usePomodori";
 
 const machine = createMachine(
   {
@@ -47,7 +48,9 @@ const machine = createMachine(
               cond: "isResting",
               actions: ["stop", "setAsTomato"],
             },
-            { actions: ["stop", "setAsResting", "add5", "start"] },
+            {
+              actions: ["addPomodoro", "stop", "setAsResting", "add5", "start"],
+            },
           ],
         },
       },
@@ -70,10 +73,11 @@ const machine = createMachine(
 );
 
 function App() {
+  const { addPomodoro, pomodori } = usePomodori();
   const { add25, add5, accumulated, start, stop, pause, emitter } = useTimer();
   const m = useMemo(() => machine, []);
   const [state, send, service] = useMachine(m, {
-    actions: { add25, add5, start, stop, pause },
+    actions: { add25, add5, start, stop, pause, addPomodoro },
   });
 
   const isIdle = state.matches("idle");
@@ -110,6 +114,7 @@ function App() {
       {isIdle && (
         <IdleState
           key="idle"
+          pomodori={pomodori}
           accumulated={accumulated}
           handlePlay={handlePlay}
         />
@@ -137,13 +142,16 @@ function App() {
 function IdleState({
   handlePlay,
   accumulated,
+  pomodori,
 }: {
   handlePlay: VoidFunction;
   accumulated: Date;
+  pomodori: null[];
 }) {
   return (
     <div className="grid grid-cols-10 h-12 items-center bg-[#57423F]">
       <Timer accumulated={accumulated} />
+      <Pomodori pomodori={pomodori} />
       <div className="col-start-10">
         <PlayButton onClick={handlePlay} />
       </div>
@@ -227,9 +235,19 @@ function SkipButton({ onClick }: { onClick: VoidFunction }) {
 
 function Timer({ accumulated }: { accumulated: Date }) {
   return (
-    <div className="col-span-4 pl-3 tabular-nums text-2xl text-white mix-blend-overlay">
+    <div className="col-span-2 pl-3 tabular-nums text-2xl text-white mix-blend-overlay">
       {format(accumulated, "mm:ss")}
     </div>
+  );
+}
+
+function Pomodori({ pomodori }: { pomodori: null[] }) {
+  return (
+    <ul className="flex gap-1">
+      {pomodori.map(() => (
+        <li className="text-white mix-blend-overlay">•</li>
+      ))}
+    </ul>
   );
 }
 
