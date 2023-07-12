@@ -10,5 +10,5 @@ body {
 }
 
 #root {
-  @apply w-[480px] h-12 border;
+  @apply w-[480px] h-12;
 }

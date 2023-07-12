@@ -1,19 +1,21 @@
+import mitt, { Emitter } from "mitt";
 import { useMachine, useSelector } from "@xstate/react";
 import {
   addMilliseconds,
   differenceInMilliseconds,
   setMilliseconds,
 } from "date-fns";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 import { assign, createMachine, State } from "xstate";
 
-const MIN_0 = 0;
-const MIN_1 = 60 * 1000;
-const MIN_5 = 5 * 60 * 1000;
-const MIN_25 = 25 * 60 * 1000;
-const AN_HOUR = 60 * 60 * 1000;
+export const MIN_0 = 0;
+export const MIN_1 = 60 * 1000;
+export const MIN_5 = 5 * 60 * 1000;
+export const MIN_25 = 25 * 60 * 1000;
+export const AN_HOUR = 60 * 60 * 1000;
 
 type Context = {
+  emitter: Emitter<Record<"completed", unknown>>;
   totalTime: number;
   endAt: Date;
   accumulated: Date;
@@ -37,15 +39,18 @@ type Events =
   | { type: "STOP" }
   | { type: "TICK" };
 
+const emitter = mitt();
+
 export const timerMachine = createMachine<Context, Events>(
   {
     predictableActionArguments: true,
-    initial: "idle",
     context: {
+      emitter,
       totalTime: MIN_0,
       endAt: new Date(0),
       accumulated: new Date(0),
     },
+    initial: "idle",
     on: {
       ADD: [
         {
@@ -101,6 +106,7 @@ export const timerMachine = createMachine<Context, Events>(
             },
             {
               target: "idle",
+              actions: ["sendTimerComplete"],
             },
           ],
         },
@@ -117,6 +123,9 @@ export const timerMachine = createMachine<Context, Events>(
       accumulatedIsMoreThanZero: (ctx) => ctx.accumulated.getTime() > 999,
     },
     actions: {
+      sendTimerComplete: () => {
+        emitter.emit("completed");
+      },
       add: assign({
         totalTime: (ctx, event) => ctx.totalTime + (event as AddEvent).amount,
         accumulated: (ctx, event) =>
@@ -162,7 +171,8 @@ export const timerMachine = createMachine<Context, Events>(
 );
 
 export function useTimer() {
-  const [, send, service] = useMachine(timerMachine);
+  const m = useMemo(() => timerMachine, []);
+  const [, send, service] = useMachine(m);
   const accumulated = useSelector(
     service,
     (state: State<Context>) => state.context.accumulated
@@ -190,6 +200,7 @@ export function useTimer() {
   }, [send]);
 
   return {
+    emitter,
     accumulated,
     isRunning,
     start,

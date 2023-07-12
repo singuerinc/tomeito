@@ -5,12 +5,13 @@ import {
 } from "@tabler/icons-react";
 import { useMachine, useSelector } from "@xstate/react";
 import format from "date-fns/format";
-import { useCallback } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 import { assign, createMachine } from "xstate";
 import { useTimer } from "./useTimer";
 
 const machine = createMachine(
   {
+    predictableActionArguments: true,
     initial: "idle",
     context: {
       mode: "TOMATO",
@@ -40,6 +41,14 @@ const machine = createMachine(
             },
             { actions: ["stop", "setAsResting", "add5", "start"] },
           ],
+          COMPLETED: [
+            {
+              target: "idle",
+              cond: "isResting",
+              actions: ["stop", "setAsTomato"],
+            },
+            { actions: ["stop", "setAsResting", "add5", "start"] },
+          ],
         },
       },
       paused: {
@@ -61,10 +70,12 @@ const machine = createMachine(
 );
 
 function App() {
-  const { add25, add5, accumulated, start, stop, pause } = useTimer();
-  const [state, send, service] = useMachine(machine, {
+  const { add25, add5, accumulated, start, stop, pause, emitter } = useTimer();
+  const m = useMemo(() => machine, []);
+  const [state, send, service] = useMachine(m, {
     actions: { add25, add5, start, stop, pause },
   });
+
   const isIdle = state.matches("idle");
   const isRunning = state.matches("running");
   const isPaused = state.matches("paused");
@@ -86,13 +97,26 @@ function App() {
     send("SKIP");
   }, [send]);
 
+  useEffect(() => {
+    emitter.on("completed", () => {
+      send("COMPLETED");
+    });
+
+    return () => emitter.off("completed");
+  }, [emitter, send]);
+
   return (
-    <div className="">
+    <>
       {isIdle && (
-        <IdleState accumulated={accumulated} handlePlay={handlePlay} />
+        <IdleState
+          key="idle"
+          accumulated={accumulated}
+          handlePlay={handlePlay}
+        />
       )}
       {isRunning && (
         <RunningState
+          key="running"
           accumulated={accumulated}
           isResting={isResting}
           handlePause={handlePause}
@@ -100,9 +124,13 @@ function App() {
         />
       )}
       {isPaused && (
-        <PausedState accumulated={accumulated} handlePlay={handlePlay} />
+        <PausedState
+          key="paused"
+          accumulated={accumulated}
+          handlePlay={handlePlay}
+        />
       )}
-    </div>
+    </>
   );
 }
 
