@@ -4,12 +4,25 @@ import {
   IconPlayerSkipForward,
 } from "@tabler/icons-react";
 import format from "date-fns/format";
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { usePomodori } from "./usePomodori";
 import { usePomodoroTimer } from "./usePomodoroTimer";
 import { useTimer } from "./useTimer";
-import { useEffect } from "react";
 
 function App() {
+  const [taskTitle, setTaskTitle] = useState(
+    localStorage.getItem("title") ?? "Untitled"
+  );
+  const setTitle = useCallback((value: string) => {
+    setTaskTitle(value);
+    localStorage.setItem("title", value);
+  }, []);
+
   const { addPomodoro, pomodori } = usePomodori();
   const { add25, add5, accumulated, start, stop, pause, emitter } = useTimer();
   const {
@@ -52,28 +65,30 @@ function App() {
           isResting={isResting}
           handlePause={handlePause}
           handleSkip={handleSkip}
-        />
+        >
+          <TaskTitle title={taskTitle} setTitle={setTitle} />
+        </RunningState>
       )}
       {isPaused && (
         <PausedState
           key="paused"
           accumulated={accumulated}
           handlePlay={handlePlay}
-        />
+        >
+          <TaskTitle title={taskTitle} setTitle={setTitle} />
+        </PausedState>
       )}
     </>
   );
 }
 
-function IdleState({
-  handlePlay,
-  accumulated,
-  pomodori,
-}: {
-  handlePlay: VoidFunction;
-  accumulated: Date;
-  pomodori: null[];
-}) {
+const IdleState: React.FC<
+  PropsWithChildren<{
+    handlePlay: VoidFunction;
+    accumulated: Date;
+    pomodori: null[];
+  }>
+> = ({ handlePlay, accumulated, pomodori }) => {
   return (
     <div className="grid grid-cols-10 h-12 items-center bg-[#57423F]">
       <Timer accumulated={accumulated} />
@@ -83,19 +98,16 @@ function IdleState({
       </div>
     </div>
   );
-}
+};
 
-function RunningState({
-  isResting,
-  handlePause,
-  handleSkip,
-  accumulated,
-}: {
-  isResting: boolean;
-  handlePause: VoidFunction;
-  handleSkip: VoidFunction;
-  accumulated: Date;
-}) {
+const RunningState: React.FC<
+  PropsWithChildren<{
+    isResting: boolean;
+    handlePause: VoidFunction;
+    handleSkip: VoidFunction;
+    accumulated: Date;
+  }>
+> = ({ isResting, handlePause, handleSkip, accumulated, children }) => {
   return (
     <div
       className={`grid grid-cols-10 h-12 items-center ${
@@ -103,6 +115,7 @@ function RunningState({
       }`}
     >
       <Timer accumulated={accumulated} />
+      {!isResting && children}
       <div
         className={`${
           !isResting ? "col-start-9" : "col-start-10"
@@ -113,24 +126,24 @@ function RunningState({
       </div>
     </div>
   );
-}
+};
 
-function PausedState({
-  handlePlay,
-  accumulated,
-}: {
-  handlePlay: VoidFunction;
-  accumulated: Date;
-}) {
+const PausedState: React.FC<
+  PropsWithChildren<{
+    handlePlay: VoidFunction;
+    accumulated: Date;
+  }>
+> = ({ handlePlay, accumulated, children }) => {
   return (
     <div className="grid grid-cols-10 h-12 items-center bg-[#BFA6A2]">
       <Timer accumulated={accumulated} />
+      {children}
       <div className="col-start-10 col-span-2 grid grid-cols-2">
         <PlayButton onClick={handlePlay} />
       </div>
     </div>
   );
-}
+};
 
 function PlayButton({ onClick }: { onClick: VoidFunction }) {
   return (
@@ -174,6 +187,26 @@ function Pomodori({ pomodori }: { pomodori: null[] }) {
         <li className="text-white mix-blend-overlay">•</li>
       ))}
     </ul>
+  );
+}
+
+function TaskTitle({
+  title,
+  setTitle,
+}: {
+  title: string;
+  setTitle: (value: string) => void;
+}) {
+  const handleChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => setTitle(e.target.value),
+    [setTitle]
+  );
+  return (
+    <input
+      className="text-white mix-blend-overlay text-2xl col-span-5 border-0 bg-transparent"
+      value={title}
+      onChange={handleChange}
+    />
   );
 }
 
