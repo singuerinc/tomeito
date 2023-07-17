@@ -6,7 +6,6 @@ html,
 body {
   @apply antialiased;
   @apply w-full h-full;
-  @apply flex items-center justify-center;
 }
 
 #root {
